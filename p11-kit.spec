@@ -4,7 +4,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.1
-Release  : 9
+Release  : 10
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.1.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.1.tar.gz
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
