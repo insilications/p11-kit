@@ -1,0 +1,7 @@
+[Unit]
+Description=Rebuild certificate database
+BindsTo=update-triggers.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/update-ca-trust

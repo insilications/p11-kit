@@ -3,3 +3,4 @@
 # Full path names, one per line.
 #
 /etc/pkcs11/pkcs11.conf.example
+%{_libdir}/p11-kit/trust-extract-compat

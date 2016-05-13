@@ -4,13 +4,16 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 13
+Release  : 21
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
+Source1  : p11-kit-trigger.service
+Source2  : p11-kit.tmpfiles
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: p11-kit-bin
+Requires: p11-kit-config
 Requires: p11-kit-lib
 Requires: p11-kit-doc
 Requires: p11-kit-data
@@ -18,6 +21,7 @@ BuildRequires : ca-certs
 BuildRequires : pkgconfig(libffi)
 BuildRequires : pkgconfig(libtasn1)
 Patch1: 0001-Fix-test-case.patch
+Patch2: 0001-steal-update-ca-trust-from-fedora.patch
 
 %description
 P11-KIT
@@ -29,9 +33,18 @@ discoverable.
 Summary: bin components for the p11-kit package.
 Group: Binaries
 Requires: p11-kit-data
+Requires: p11-kit-config
 
 %description bin
 bin components for the p11-kit package.
+
+
+%package config
+Summary: config components for the p11-kit package.
+Group: Default
+
+%description config
+config components for the p11-kit package.
 
 
 %package data
@@ -66,6 +79,7 @@ doc components for the p11-kit package.
 Summary: lib components for the p11-kit package.
 Group: Libraries
 Requires: p11-kit-data
+Requires: p11-kit-config
 
 %description lib
 lib components for the p11-kit package.
@@ -74,6 +88,7 @@ lib components for the p11-kit package.
 %prep
 %setup -q -n p11-kit-0.23.2
 %patch1 -p1
+%patch2 -p1
 
 %build
 %configure --disable-static --with-trust-paths=/etc/ssl/certs:/usr/share/ca-certs/
@@ -88,6 +103,16 @@ make VERBOSE=1 V=1 %{?_smp_mflags} check
 %install
 rm -rf %{buildroot}
 %make_install
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/p11-kit-trigger.service
+mkdir -p %{buildroot}/usr/lib/tmpfiles.d
+install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/tmpfiles.d/p11-kit.conf
+## make_install_append content
+rm %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
+install -m 0755 %{_builddir}/p11-kit-0.23.2/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
+ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
+ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
+## make_install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -98,6 +123,12 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/bin/p11-kit
 /usr/bin/trust
+/usr/bin/update-ca-trust
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/p11-kit-trigger.service
+/usr/lib/tmpfiles.d/p11-kit.conf
 
 %files data
 %defattr(-,root,root,-)

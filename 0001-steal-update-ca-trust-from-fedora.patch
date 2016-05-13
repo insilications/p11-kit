@@ -1,0 +1,40 @@
+From 20a9a58c9b29eb78c38d20b85af4b1d011591b04 Mon Sep 17 00:00:00 2001
+From: Michael Leibowitz <michael.leibowitz@intel.com>
+Date: Fri, 10 Jun 2016 04:29:58 +0000
+Subject: [PATCH] steal update-ca-trust from fedora
+
+tweak the destination dir
+---
+ update-ca-trust | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100755 update-ca-trust
+
+diff --git a/update-ca-trust b/update-ca-trust
+new file mode 100755
+index 0000000..9a0288b
+--- /dev/null
++++ b/update-ca-trust
+@@ -0,0 +1,20 @@
++#!/bin/sh
++
++#stolen with love from http://pkgs.fedoraproject.org/cgit/rpms/ca-certificates.git/tree/update-ca-trust?h=f24
++
++#set -vx
++
++# At this time, while this script is trivial, we ignore any parameters given.
++# However, for backwards compatibility reasons, future versions of this script must
++# support the syntax "update-ca-trust extract" trigger the generation of output
++# files in $DEST.
++
++DEST=/var/cache/ca-certs/extracted
++
++# OpenSSL PEM bundle that includes trust flags
++# (BEGIN TRUSTED CERTIFICATE)
++/usr/bin/p11-kit extract --format=openssl-bundle --filter=certificates --overwrite $DEST/openssl/ca-bundle.trust.pem
++/usr/bin/p11-kit extract --format=pem-bundle --filter=ca-anchors --overwrite --purpose server-auth $DEST/pem/tls-ca-bundle.pem
++/usr/bin/p11-kit extract --format=pem-bundle --filter=ca-anchors --overwrite --purpose email $DEST/pem/email-ca-bundle.pem
++/usr/bin/p11-kit extract --format=pem-bundle --filter=ca-anchors --overwrite --purpose code-signing $DEST/pem/objsign-ca-bundle.pem
++/usr/bin/p11-kit extract --format=java-cacerts --filter=ca-anchors --overwrite --purpose server-auth $DEST/java/cacerts
+-- 
+2.8.2
+
