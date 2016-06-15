@@ -4,7 +4,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 23
+Release  : 25
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -112,7 +112,7 @@ install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/tmpfiles.d/p11-kit.conf
 ## make_install_append content
 rm %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 install -m 0755 %{_builddir}/p11-kit-0.23.2/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
-install -m 0755 %{_builddir}/p11-kit-0.23.2/trust-certs %{buildroot}/%{_bindir}/update-trust
+install -m 0755 %{_builddir}/p11-kit-0.23.2/trust-certs %{buildroot}/%{_bindir}/trust-certs
 ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 ## make_install_append end
@@ -126,8 +126,8 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 %defattr(-,root,root,-)
 /usr/bin/p11-kit
 /usr/bin/trust
+/usr/bin/trust-certs
 /usr/bin/update-ca-trust
-/usr/bin/update-trust
 
 %files config
 %defattr(-,root,root,-)
