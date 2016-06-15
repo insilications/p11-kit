@@ -1,1 +1,1 @@
---with-trust-paths=/etc/ssl/certs:/usr/share/ca-certs/
+--with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/

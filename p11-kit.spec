@@ -4,7 +4,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 21
+Release  : 23
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -22,6 +22,7 @@ BuildRequires : pkgconfig(libffi)
 BuildRequires : pkgconfig(libtasn1)
 Patch1: 0001-Fix-test-case.patch
 Patch2: 0001-steal-update-ca-trust-from-fedora.patch
+Patch3: 0001-Add-shell-script-to-call-post-update.patch
 
 %description
 P11-KIT
@@ -89,9 +90,10 @@ lib components for the p11-kit package.
 %setup -q -n p11-kit-0.23.2
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
-%configure --disable-static --with-trust-paths=/etc/ssl/certs:/usr/share/ca-certs/
+%configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/
 make V=1  %{?_smp_mflags}
 
 %check
@@ -110,6 +112,7 @@ install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/tmpfiles.d/p11-kit.conf
 ## make_install_append content
 rm %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 install -m 0755 %{_builddir}/p11-kit-0.23.2/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
+install -m 0755 %{_builddir}/p11-kit-0.23.2/trust-certs %{buildroot}/%{_bindir}/update-trust
 ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 ## make_install_append end
@@ -124,6 +127,7 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/bin/p11-kit
 /usr/bin/trust
 /usr/bin/update-ca-trust
+/usr/bin/update-trust
 
 %files config
 %defattr(-,root,root,-)

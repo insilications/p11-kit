@@ -4,4 +4,6 @@ BindsTo=update-triggers.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/update-ca-trust
+ExecStart=/usr/bin/trust-certs
+
+

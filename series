@@ -1,2 +1,3 @@
 0001-Fix-test-case.patch
 0001-steal-update-ca-trust-from-fedora.patch
+0001-Add-shell-script-to-call-post-update.patch
