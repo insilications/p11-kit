@@ -1,0 +1,41 @@
+From 4efc97c897c59b55ebc45025b8c213233b644ea7 Mon Sep 17 00:00:00 2001
+From: Michael Leibowitz <michael.leibowitz@intel.com>
+Date: Fri, 17 Jun 2016 18:32:38 +0000
+Subject: [PATCH] Added P11_TRUST_PATHS to override via env
+
+This addes the ability to set an environment variable to override the
+default placement of trusted cert store at runtime.
+
+Signed-off-by: Michael Leibowitz <michael.leibowitz@intel.com>
+---
+ trust/module.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/trust/module.c b/trust/module.c
+index 7fce465..58e0243 100644
+--- a/trust/module.c
++++ b/trust/module.c
+@@ -382,6 +382,7 @@ sys_C_Initialize (CK_VOID_PTR init_args)
+ 		 */
+ 		} else if (rv == CKR_OK) {
+ 			p11_debug ("doing initialization");
++			char *paths;
+ 
+ 			if (args->pReserved)
+ 				p11_argv_parse ((const char*)args->pReserved, parse_argument, NULL);
+@@ -391,7 +392,11 @@ sys_C_Initialize (CK_VOID_PTR init_args)
+ 			                            NULL, p11_session_free);
+ 
+ 			gl.tokens = p11_array_new ((p11_destroyer)p11_token_free);
+-			if (gl.tokens && !create_tokens_inlock (gl.tokens, gl.paths ? gl.paths : TRUST_PATHS))
++			paths = secure_getenv("P11_TRUST_PATHS");
++			if (!paths)
++				paths = gl.paths ? gl.paths : TRUST_PATHS;
++
++			if (gl.tokens && !create_tokens_inlock (gl.tokens, (const char*)paths))
+ 				gl.tokens = NULL;
+ 
+ 			if (gl.sessions == NULL || gl.tokens == NULL) {
+-- 
+2.9.0
+

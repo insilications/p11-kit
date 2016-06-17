@@ -1,4 +1,4 @@
-From deb7a64dcf7069c908c74ec9a41e7fa3b5c1cd15 Mon Sep 17 00:00:00 2001
+From ef7eb025533dd180d31004428ef70eeec31a94c7 Mon Sep 17 00:00:00 2001
 From: Michael Leibowitz <michael.leibowitz@intel.com>
 Date: Wed, 15 Jun 2016 00:11:23 +0000
 Subject: [PATCH] Add shell script to call post-update
@@ -7,17 +7,26 @@ post-update trigger
 
 Signed-off-by: Michael Leibowitz <michael.leibowitz@intel.com>
 ---
- trust-certs | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ trust-certs | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
  create mode 100755 trust-certs
 
 diff --git a/trust-certs b/trust-certs
 new file mode 100755
-index 0000000..bd958d5
+index 0000000..1a9063c
 --- /dev/null
 +++ b/trust-certs
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,17 @@
 +#!/bin/bash
++
++if [ ! -d /var/cache/ca-certs ]
++then
++    mkdir -p /var/cache/ca-certs
++    mkdir -p /var/cache/ca-certs/extracted
++    mkdir -p /var/cache/ca-certs/extracted/java
++    mkdir -p /var/cache/ca-certs/extracted/openssl
++    mkdir -p /var/cache/ca-certs/extracted/pem
++fi
 +
 +if [ -e /etc/ssl/certs ]
 +then

@@ -4,7 +4,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 25
+Release  : 29
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -23,6 +23,7 @@ BuildRequires : pkgconfig(libtasn1)
 Patch1: 0001-Fix-test-case.patch
 Patch2: 0001-steal-update-ca-trust-from-fedora.patch
 Patch3: 0001-Add-shell-script-to-call-post-update.patch
+Patch4: 0001-Added-P11_TRUST_PATHS-to-override-via-env.patch
 
 %description
 P11-KIT
@@ -91,6 +92,7 @@ lib components for the p11-kit package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/
