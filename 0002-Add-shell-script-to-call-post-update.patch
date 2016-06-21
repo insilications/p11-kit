@@ -1,7 +1,7 @@
-From 3e6f8517e77e8cab4913c54fe36b028a9dc648f2 Mon Sep 17 00:00:00 2001
+From 8087494dc81c6694062129c2a5d6dc9b955382d7 Mon Sep 17 00:00:00 2001
 From: Michael Leibowitz <michael.leibowitz@intel.com>
 Date: Wed, 15 Jun 2016 00:11:23 +0000
-Subject: [PATCH] Add shell script to call post-update
+Subject: [PATCH 2/3] Add shell script to call post-update
 
 post-update trigger
 
@@ -13,7 +13,7 @@ Signed-off-by: Michael Leibowitz <michael.leibowitz@intel.com>
 
 diff --git a/trust-certs b/trust-certs
 new file mode 100755
-index 0000000..d793018
+index 0000000..634540b
 --- /dev/null
 +++ b/trust-certs
 @@ -0,0 +1,23 @@
@@ -29,7 +29,7 @@ index 0000000..d793018
 +fi
 +
 +find /var/cache/ca-certs/ -type f -delete
-+find /usr/share/ca-certs/cache -type f -name \*.p11-kit -exec cp {} /var/cache/ca-certs \;
++find /usr/lib/ca-certs/cache -type f -name \*.p11-kit -exec cp {} /var/cache/ca-certs \;
 +
 +if [ -e /etc/ssl/certs ]
 +then

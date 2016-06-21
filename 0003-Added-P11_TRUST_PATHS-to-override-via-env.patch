@@ -1,7 +1,7 @@
 From c24365c6af10411e12f53a2459f843e547014a63 Mon Sep 17 00:00:00 2001
 From: Michael Leibowitz <michael.leibowitz@intel.com>
 Date: Fri, 17 Jun 2016 18:32:38 +0000
-Subject: [PATCH] Added P11_TRUST_PATHS to override via env
+Subject: [PATCH 3/3] Added P11_TRUST_PATHS to override via env
 
 This addes the ability to set an environment variable to override the
 default placement of trusted cert store at runtime.
