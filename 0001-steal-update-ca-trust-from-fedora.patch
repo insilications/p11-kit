@@ -14,7 +14,7 @@ new file mode 100755
 index 0000000..de84a52
 --- /dev/null
 +++ b/update-ca-trust
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,23 @@
 +#!/bin/bash
 +
 +#stolen with love from http://pkgs.fedoraproject.org/cgit/rpms/ca-certificates.git/tree/update-ca-trust?h=f24
@@ -28,6 +28,8 @@ index 0000000..de84a52
 +
 +CA_CERT_DIR="${P11_TRUST_PATHS:-/var/cache/ca-certs/}"
 +DEST=$CA_CERT_DIR/extracted
++
++mkdir -p $DEST/{openssl,pem,java}
 +
 +# OpenSSL PEM bundle that includes trust flags
 +# (BEGIN TRUSTED CERTIFICATE)
