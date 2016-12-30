@@ -4,7 +4,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 35
+Release  : 36
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -128,7 +128,7 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1483123976
+export SOURCE_DATE_EPOCH=1483125685
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
@@ -175,7 +175,6 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 %defattr(-,root,root,-)
 /usr/lib32/p11-kit/p11-kit-remote
 /usr/lib32/p11-kit/trust-extract-compat
-/usr/lib32/pkcs11/p11-kit-trust.so
 /usr/lib64/p11-kit/p11-kit-remote
 /usr/lib64/p11-kit/trust-extract-compat
 
@@ -269,3 +268,4 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 %defattr(-,root,root,-)
 /usr/lib32/libp11-kit.so.0
 /usr/lib32/libp11-kit.so.0.1.0
+/usr/lib32/pkcs11/p11-kit-trust.so
