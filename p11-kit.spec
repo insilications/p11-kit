@@ -4,7 +4,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 34
+Release  : 33
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -18,6 +18,13 @@ Requires: p11-kit-lib
 Requires: p11-kit-doc
 Requires: p11-kit-data
 BuildRequires : ca-certs
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
+BuildRequires : pkgconfig(32libffi)
+BuildRequires : pkgconfig(32libtasn1)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : pkgconfig(libtasn1)
 Patch1: 0001-Fix-test-case.patch
@@ -69,6 +76,18 @@ Provides: p11-kit-devel
 dev components for the p11-kit package.
 
 
+%package dev32
+Summary: dev32 components for the p11-kit package.
+Group: Default
+Requires: p11-kit-lib32
+Requires: p11-kit-bin
+Requires: p11-kit-data
+Requires: p11-kit-dev
+
+%description dev32
+dev32 components for the p11-kit package.
+
+
 %package doc
 Summary: doc components for the p11-kit package.
 Group: Documentation
@@ -87,18 +106,40 @@ Requires: p11-kit-config
 lib components for the p11-kit package.
 
 
+%package lib32
+Summary: lib32 components for the p11-kit package.
+Group: Default
+Requires: p11-kit-data
+Requires: p11-kit-config
+
+%description lib32
+lib32 components for the p11-kit package.
+
+
 %prep
 %setup -q -n p11-kit-0.23.2
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+pushd ..
+cp -a p11-kit-0.23.2 build32
+popd
 
 %build
 export LANG=C
-%configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/
+export SOURCE_DATE_EPOCH=1483123976
+%configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
+pushd ../build32/
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export CFLAGS="$CFLAGS -m32"
+export CXXFLAGS="$CXXFLAGS -m32"
+export LDFLAGS="$LDFLAGS -m32"
+%configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make V=1  %{?_smp_mflags}
+popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
@@ -108,6 +149,15 @@ make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
 rm -rf %{buildroot}
+pushd ../build32/
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+popd
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/p11-kit-trigger.service
@@ -123,6 +173,9 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 %files
 %defattr(-,root,root,-)
+/usr/lib32/p11-kit/p11-kit-remote
+/usr/lib32/p11-kit/trust-extract-compat
+/usr/lib32/pkcs11/p11-kit-trust.so
 /usr/lib64/p11-kit/p11-kit-remote
 /usr/lib64/p11-kit/trust-extract-compat
 
@@ -152,8 +205,17 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/include/p11-kit-1/p11-kit/pkcs11x.h
 /usr/include/p11-kit-1/p11-kit/remote.h
 /usr/include/p11-kit-1/p11-kit/uri.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libnssckbi.so
+/usr/lib64/libp11-kit.so
+/usr/lib64/p11-kit-proxy.so
+/usr/lib64/pkgconfig/p11-kit-1.pc
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libp11-kit.so
+/usr/lib32/p11-kit-proxy.so
+/usr/lib32/pkgconfig/32p11-kit-1.pc
+/usr/lib32/pkgconfig/p11-kit-1.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -199,5 +261,11 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libp11-kit.so.0
+/usr/lib64/libp11-kit.so.0.1.0
 /usr/lib64/pkcs11/p11-kit-trust.so
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libp11-kit.so.0
+/usr/lib32/libp11-kit.so.0.1.0
