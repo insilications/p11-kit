@@ -37,8 +37,8 @@ index 0000000..d793018
 +fi
 +
 +update-ca-trust
-+
-+
++#ubuntu compat
++ln -s /var/cache/ca-certs/extracted/openssl/ca-bundle.trust.pem /var/cache/ca-certs/ca-certificates.crt
 +
 -- 
 2.9.0
