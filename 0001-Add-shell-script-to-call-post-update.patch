@@ -29,6 +29,7 @@ index 0000000..d793018
 +fi
 +
 +find /var/cache/ca-certs/ -type f -delete
++find /var/cache/ca-certs/ -type l -delete
 +find /usr/share/ca-certs/cache -type f -name \*.p11-kit -exec cp {} /var/cache/ca-certs \;
 +
 +if [ -e /etc/ssl/custom_certs ]
