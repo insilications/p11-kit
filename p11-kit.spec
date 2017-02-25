@@ -6,11 +6,12 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 39
+Release  : 40
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
 Source2  : p11-kit.tmpfiles
+Source99 : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz.asc
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -130,7 +131,7 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484182902
+export SOURCE_DATE_EPOCH=1488035384
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
@@ -150,6 +151,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1488035384
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
