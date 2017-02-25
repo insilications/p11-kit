@@ -6,7 +6,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 40
+Release  : 41
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -99,6 +99,14 @@ Group: Documentation
 doc components for the p11-kit package.
 
 
+%package extras
+Summary: extras components for the p11-kit package.
+Group: Default
+
+%description extras
+extras components for the p11-kit package.
+
+
 %package lib
 Summary: lib components for the p11-kit package.
 Group: Libraries
@@ -131,7 +139,7 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1488035384
+export SOURCE_DATE_EPOCH=1488035501
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
@@ -151,7 +159,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1488035384
+export SOURCE_DATE_EPOCH=1488035501
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -177,8 +185,8 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 %files
 %defattr(-,root,root,-)
-/usr/lib32/p11-kit/p11-kit-remote
-/usr/lib32/p11-kit/trust-extract-compat
+%exclude /usr/lib32/p11-kit/p11-kit-remote
+%exclude /usr/lib32/p11-kit/trust-extract-compat
 /usr/lib64/p11-kit/p11-kit-remote
 /usr/lib64/p11-kit/trust-extract-compat
 
@@ -261,6 +269,11 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/share/gtk-doc/html/p11-kit/trust.html
 /usr/share/gtk-doc/html/p11-kit/up-insensitive.png
 /usr/share/gtk-doc/html/p11-kit/up.png
+
+%files extras
+%defattr(-,root,root,-)
+/usr/lib32/p11-kit/p11-kit-remote
+/usr/lib32/p11-kit/trust-extract-compat
 
 %files lib
 %defattr(-,root,root,-)
