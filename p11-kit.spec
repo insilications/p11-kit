@@ -6,7 +6,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 41
+Release  : 42
 URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
@@ -20,6 +20,7 @@ Requires: p11-kit-config
 Requires: p11-kit-lib
 Requires: p11-kit-doc
 Requires: p11-kit-data
+Requires: findutils
 BuildRequires : ca-certs
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
@@ -138,8 +139,11 @@ cp -a p11-kit-0.23.2 build32
 popd
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1488035501
+export SOURCE_DATE_EPOCH=1492696678
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
@@ -155,11 +159,11 @@ popd
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1488035501
+export SOURCE_DATE_EPOCH=1492696678
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
