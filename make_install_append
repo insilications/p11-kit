@@ -3,8 +3,8 @@
 #mkdir -p %{buildroot}/%{_localstatedir}/cache/ca-certs/extracted/java
 #mkdir -p %{buildroot}/%{_localstatedir}/cache/ca-certs/extracted/openssl
 #mkdir -p %{buildroot}/%{_localstatedir}/cache/ca-certs/extracted/pem
-rm %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
-install -m 0755 %{_builddir}/p11-kit-0.23.2/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
-install -m 0755 %{_builddir}/p11-kit-0.23.2/trust-certs %{buildroot}/%{_bindir}/trust-certs
-ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat 
+rm %{buildroot}/%{_libexecdir}/p11-kit/trust-extract-compat
+install -m 0755 %{_builddir}/p11-kit-%{version}/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
+install -m 0755 %{_builddir}/p11-kit-%{version}/trust-certs %{buildroot}/%{_bindir}/trust-certs
+ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libexecdir}/p11-kit/trust-extract-compat 
 ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
