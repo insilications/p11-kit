@@ -6,7 +6,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.2
-Release  : 44
+Release  : 43
 URL      : http://p11-glue.freedesktop.org/p11-kit.html
 Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-%{version}.tar.gz
 Source1  : p11-kit-trigger.service
