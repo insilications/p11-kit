@@ -5,10 +5,10 @@
 # Source0 file verified with key 0x7BFB1108D92765AF (stefw@gnome.org)
 #
 Name     : p11-kit
-Version  : 0.23.7
+Version  : 0.23.2
 Release  : 44
 URL      : http://p11-glue.freedesktop.org/p11-kit.html
-Source0  : https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.gz
+Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-%{version}.tar.gz
 Source1  : p11-kit-trigger.service
 Source2  : p11-kit.tmpfiles
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
@@ -101,6 +101,14 @@ Group: Documentation
 doc components for the p11-kit package.
 
 
+%package extras
+Summary: extras components for the p11-kit package.
+Group: Default
+
+%description extras
+extras components for the p11-kit package.
+
+
 %package lib
 Summary: lib components for the p11-kit package.
 Group: Libraries
@@ -172,18 +180,19 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/p11-kit-trigger.s
 mkdir -p %{buildroot}/usr/lib/tmpfiles.d
 install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/tmpfiles.d/p11-kit.conf
 ## make_install_append content
-rm %{buildroot}/%{_libexecdir}/p11-kit/trust-extract-compat
+rm %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 install -m 0755 %{_builddir}/p11-kit-%{version}/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
 install -m 0755 %{_builddir}/p11-kit-%{version}/trust-certs %{buildroot}/%{_bindir}/trust-certs
-ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libexecdir}/p11-kit/trust-extract-compat
+ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 ## make_install_append end
 
 %files
 %defattr(-,root,root,-)
-/usr/libexec/p11-kit/p11-kit-remote
-/usr/libexec/p11-kit/p11-kit-server
-/usr/libexec/p11-kit/trust-extract-compat
+%exclude /usr/lib32/p11-kit/p11-kit-remote
+%exclude /usr/lib32/p11-kit/trust-extract-compat
+/usr/lib64/p11-kit/p11-kit-remote
+/usr/lib64/p11-kit/trust-extract-compat
 
 %files bin
 %defattr(-,root,root,-)
@@ -211,6 +220,9 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/include/p11-kit-1/p11-kit/pkcs11x.h
 /usr/include/p11-kit-1/p11-kit/remote.h
 /usr/include/p11-kit-1/p11-kit/uri.h
+/usr/lib64/libnssckbi.so
+/usr/lib64/libp11-kit.so
+/usr/lib64/p11-kit-proxy.so
 /usr/lib64/pkgconfig/p11-kit-1.pc
 
 %files dev32
@@ -224,19 +236,19 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 %defattr(-,root,root,-)
 /usr/share/gtk-doc/html/p11-kit/*
 
+%files extras
+%defattr(-,root,root,-)
+/usr/lib32/p11-kit/p11-kit-remote
+/usr/lib32/p11-kit/trust-extract-compat
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libp11-kit.so.0
-/usr/lib64/libp11-kit.so.0.3.0
+/usr/lib64/libp11-kit.so.0.1.0
 /usr/lib64/pkcs11/p11-kit-trust.so
-/usr/lib64/pkcs11/p11-kit-client.so
-/usr/lib64/libnssckbi.so
-/usr/lib64/libp11-kit.so
-/usr/lib64/p11-kit-proxy.so
 
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libp11-kit.so.0
-/usr/lib32/libp11-kit.so.0.3.0
+/usr/lib32/libp11-kit.so.0.1.0
 /usr/lib32/pkcs11/p11-kit-trust.so
-/usr/lib32/pkcs11/p11-kit-client.so
