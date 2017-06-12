@@ -1,4 +1,4 @@
 0001-Fix-test-case.patch
-0002-steal-update-ca-trust-from-fedora.patch
-0003-Add-shell-script-to-call-post-update.patch
-0004-Added-P11_TRUST_PATHS-to-override-via-env.patch
+0001-steal-update-ca-trust-from-fedora.patch
+0001-Add-shell-script-to-call-post-update.patch
+0001-Added-P11_TRUST_PATHS-to-override-via-env.patch
