@@ -7,10 +7,11 @@
 Name     : p11-kit
 Version  : 0.23.2
 Release  : 43
-URL      : http://p11-glue.freedesktop.org/p11-kit.html
-Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-%{version}.tar.gz
+URL      : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
+Source0  : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz
 Source1  : p11-kit-trigger.service
 Source2  : p11-kit.tmpfiles
+Source99 : http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz.asc
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -31,11 +32,9 @@ BuildRequires : pkgconfig(32libtasn1)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : pkgconfig(libtasn1)
 Patch1: 0001-Fix-test-case.patch
-Patch2: 0002-steal-update-ca-trust-from-fedora.patch
-Patch3: 0003-Add-shell-script-to-call-post-update.patch
-Patch4: 0004-Added-P11_TRUST_PATHS-to-override-via-env.patch
-
-%define trust_path /var/cache/ca-certs:/etc/ssl/certs:/usr/share/ca-certs
+Patch2: 0001-steal-update-ca-trust-from-fedora.patch
+Patch3: 0001-Add-shell-script-to-call-post-update.patch
+Patch4: 0001-Added-P11_TRUST_PATHS-to-override-via-env.patch
 
 %description
 P11-KIT
@@ -128,14 +127,15 @@ Requires: p11-kit-config
 %description lib32
 lib32 components for the p11-kit package.
 
+
 %prep
-%setup -q -n p11-kit-%{version}
+%setup -q -n p11-kit-0.23.2
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 pushd ..
-cp -a p11-kit-%{version} build32
+cp -a p11-kit-0.23.2 build32
 popd
 
 %build
@@ -144,7 +144,7 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
 export SOURCE_DATE_EPOCH=1492696678
-%configure --disable-static --with-trust-paths=%{trust_path} --with-hash-impl=internal
+%configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
 pushd ../build32/
@@ -152,7 +152,7 @@ export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
-%configure --disable-static --with-trust-paths=%{trust_path} --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+%configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make V=1  %{?_smp_mflags}
 popd
 %check
@@ -181,8 +181,8 @@ mkdir -p %{buildroot}/usr/lib/tmpfiles.d
 install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/tmpfiles.d/p11-kit.conf
 ## make_install_append content
 rm %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
-install -m 0755 %{_builddir}/p11-kit-%{version}/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
-install -m 0755 %{_builddir}/p11-kit-%{version}/trust-certs %{buildroot}/%{_bindir}/trust-certs
+install -m 0755 %{_builddir}/p11-kit-0.23.2/update-ca-trust  %{buildroot}/%{_bindir}/update-ca-trust
+install -m 0755 %{_builddir}/p11-kit-0.23.2/trust-certs %{buildroot}/%{_bindir}/trust-certs
 ln -s %{_bindir}/update-ca-trust  %{buildroot}/%{_libdir}/p11-kit/trust-extract-compat
 ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 ## make_install_append end
@@ -234,7 +234,45 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 %files doc
 %defattr(-,root,root,-)
-/usr/share/gtk-doc/html/p11-kit/*
+/usr/share/gtk-doc/html/p11-kit/config-example.html
+/usr/share/gtk-doc/html/p11-kit/config-files.html
+/usr/share/gtk-doc/html/p11-kit/config.html
+/usr/share/gtk-doc/html/p11-kit/devel-building-style.html
+/usr/share/gtk-doc/html/p11-kit/devel-building.html
+/usr/share/gtk-doc/html/p11-kit/devel-commands.html
+/usr/share/gtk-doc/html/p11-kit/devel-debugging.html
+/usr/share/gtk-doc/html/p11-kit/devel-paths.html
+/usr/share/gtk-doc/html/p11-kit/devel-testing.html
+/usr/share/gtk-doc/html/p11-kit/devel.html
+/usr/share/gtk-doc/html/p11-kit/gtk-doc.css
+/usr/share/gtk-doc/html/p11-kit/home.png
+/usr/share/gtk-doc/html/p11-kit/index.html
+/usr/share/gtk-doc/html/p11-kit/index.sgml
+/usr/share/gtk-doc/html/p11-kit/left-insensitive.png
+/usr/share/gtk-doc/html/p11-kit/left.png
+/usr/share/gtk-doc/html/p11-kit/p11-kit-Deprecated.html
+/usr/share/gtk-doc/html/p11-kit/p11-kit-Future.html
+/usr/share/gtk-doc/html/p11-kit/p11-kit-Modules.html
+/usr/share/gtk-doc/html/p11-kit/p11-kit-PIN-Callbacks.html
+/usr/share/gtk-doc/html/p11-kit/p11-kit-URIs.html
+/usr/share/gtk-doc/html/p11-kit/p11-kit-Utilities.html
+/usr/share/gtk-doc/html/p11-kit/p11-kit.devhelp2
+/usr/share/gtk-doc/html/p11-kit/p11-kit.html
+/usr/share/gtk-doc/html/p11-kit/pkcs11-conf.html
+/usr/share/gtk-doc/html/p11-kit/reference.html
+/usr/share/gtk-doc/html/p11-kit/right-insensitive.png
+/usr/share/gtk-doc/html/p11-kit/right.png
+/usr/share/gtk-doc/html/p11-kit/sharing-managed.html
+/usr/share/gtk-doc/html/p11-kit/sharing.html
+/usr/share/gtk-doc/html/p11-kit/style.css
+/usr/share/gtk-doc/html/p11-kit/tools.html
+/usr/share/gtk-doc/html/p11-kit/trust-disable.html
+/usr/share/gtk-doc/html/p11-kit/trust-glib-networking.html
+/usr/share/gtk-doc/html/p11-kit/trust-module.html
+/usr/share/gtk-doc/html/p11-kit/trust-nss.html
+/usr/share/gtk-doc/html/p11-kit/trust.html
+/usr/share/gtk-doc/html/p11-kit/up-insensitive.png
+/usr/share/gtk-doc/html/p11-kit/up.png
 
 %files extras
 %defattr(-,root,root,-)
