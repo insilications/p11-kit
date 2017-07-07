@@ -1,0 +1,19 @@
+# This file contains recursive sources that require this package
+apache-ant
+apache-kafka
+apache-zookeeper
+ca-certs
+cargo
+curl
+elasticsearch
+glib-networking
+gradle
+ister
+libsoup
+openjdk
+p11-kit
+php
+pycurl
+rest
+rustc
+scala

@@ -1,1 +1,1 @@
---with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
+--with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal

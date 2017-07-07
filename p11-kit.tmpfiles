@@ -1,6 +1,0 @@
-#Type Path					Mode UID  GID  Age Argument
-d     /var/cache/ca-certs			-    -	  -    -
-d     /var/cache/ca-certs/extracted		-    -	  -    -
-d     /var/cache/ca-certs/extracted/java	-    -	  -    -
-d     /var/cache/ca-certs/extracted/openssl	-    -	  -    -
-d     /var/cache/ca-certs/extracted/pem		-    -	  -    -
