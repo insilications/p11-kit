@@ -5,13 +5,13 @@
 # Source0 file verified with key 0xD605848ED7E69871 (ueno@gnu.org)
 #
 Name     : p11-kit
-Version  : 0.23.7
-Release  : 45
-URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.7/p11-kit-0.23.7.tar.gz
-Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.7/p11-kit-0.23.7.tar.gz
+Version  : 0.23.8
+Release  : 46
+URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
+Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
 Source1  : p11-kit-trigger.service
 Source2  : p11-kit.tmpfiles
-Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.7/p11-kit-0.23.7.tar.gz.sig
+Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz.sig
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -121,13 +121,13 @@ lib32 components for the p11-kit package.
 
 
 %prep
-%setup -q -n p11-kit-0.23.7
+%setup -q -n p11-kit-0.23.8
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 pushd ..
-cp -a p11-kit-0.23.7 build32
+cp -a p11-kit-0.23.8 build32
 popd
 
 %build
@@ -135,7 +135,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1497309560
+export SOURCE_DATE_EPOCH=1504849200
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs/:/etc/ssl/certs:/usr/share/ca-certs/ --with-hash-impl=internal
 make V=1  %{?_smp_mflags}
 
@@ -155,7 +155,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1497309560
+export SOURCE_DATE_EPOCH=1504849200
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

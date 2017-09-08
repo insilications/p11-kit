@@ -1,15 +1,15 @@
 Configure miss: win32
+Configure miss: ucred.h usability
+Configure miss: ucred.h presence
+Configure miss: ucred.h
 Configure miss: getprogname
 Configure miss: getexecname
 Configure miss: strnstr
 Configure miss: memdup
 Configure miss: getpeereid
+Configure miss: getpeerucred
 Configure miss: whether program_invocation_short_name is declared
-Configure miss: whether program_invocation_short_name is available
 Configure miss: whether __progname is declared
-Configure miss: sighandler_t
-Configure miss: whether asprintf is declared
-Configure miss: whether vasprintf is declared
 Configure miss: dgettext in -lintl
 Configure miss: gtkdoc-check
 Configure miss: gtkdoc-rebase
@@ -26,17 +26,17 @@ Configure miss: i686-generic-linux-gnu-mt
 Configure miss: whether a statically linked program can dlopen itself
 Configure miss: i686-generic-linux-gnu-pkg-config
 Configure miss: win32
+Configure miss: ucred.h usability
+Configure miss: ucred.h presence
+Configure miss: ucred.h
 Configure miss: getprogname
 Configure miss: getexecname
 Configure miss: strnstr
 Configure miss: memdup
 Configure miss: getpeereid
+Configure miss: getpeerucred
 Configure miss: whether program_invocation_short_name is declared
-Configure miss: whether program_invocation_short_name is available
 Configure miss: whether __progname is declared
-Configure miss: sighandler_t
-Configure miss: whether asprintf is declared
-Configure miss: whether vasprintf is declared
 Configure miss: dgettext in -lintl
 Configure miss: gtkdoc-check
 Configure miss: gtkdoc-rebase
