@@ -1,4 +1,3 @@
 0001-Fix-test-case.patch
 0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
-0003-Add-stub-for-trust-command.patch
-0004-Use-p11-trust-instead-of-trust.patch
+0003-Use-p11-trust-instead-of-trust.patch
