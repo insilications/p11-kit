@@ -6,7 +6,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.8
-Release  : 50
+Release  : 51
 URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
 Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
 Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz.sig
