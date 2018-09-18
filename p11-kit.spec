@@ -6,7 +6,7 @@
 #
 Name     : p11-kit
 Version  : 0.23.14
-Release  : 52
+Release  : 53
 URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz
 Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz
 Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz.sig
@@ -34,8 +34,9 @@ BuildRequires : pkgconfig(32libtasn1)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : pkgconfig(libsystemd)
 BuildRequires : pkgconfig(libtasn1)
-Patch1: 0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
-Patch2: 0003-Use-p11-trust-instead-of-trust.patch
+Patch1: 0001-Modify-token-tests-to-reflect-the-mockroot-permissio.patch
+Patch2: 0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
+Patch3: 0003-Use-p11-trust-instead-of-trust.patch
 
 %description
 # P11-KIT
@@ -132,6 +133,7 @@ license components for the p11-kit package.
 %setup -q -n p11-kit-0.23.14
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 pushd ..
 cp -a p11-kit-0.23.14 build32
 popd
@@ -141,7 +143,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1537285859
+export SOURCE_DATE_EPOCH=1537296829
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
@@ -167,7 +169,7 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1537285859
+export SOURCE_DATE_EPOCH=1537296829
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/p11-kit
 cp COPYING %{buildroot}/usr/share/doc/p11-kit/COPYING
