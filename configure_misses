@@ -2,46 +2,28 @@ Configure miss: win32
 Configure miss: ucred.h usability
 Configure miss: ucred.h presence
 Configure miss: ucred.h
-Configure miss: getprogname
-Configure miss: getexecname
 Configure miss: strnstr
 Configure miss: memdup
-Configure miss: getpeereid
-Configure miss: getpeerucred
 Configure miss: whether program_invocation_short_name is declared
 Configure miss: whether __progname is declared
 Configure miss: dgettext in -lintl
-Configure miss: gtkdoc-check
-Configure miss: gtkdoc-rebase
-Configure miss: gtkdoc-mkpdf
-Configure miss: gtkdoc-scan
 Configure miss: xsltproc
 Configure miss: whether to build documentation
 Configure miss: build strict
 Configure miss: whether to build with gcov testing
-Configure miss: i686-generic-linux-gnu-objdump
-Configure miss: i686-generic-linux-gnu-dlltool
-Configure miss: i686-generic-linux-gnu-strip
-Configure miss: i686-generic-linux-gnu-mt
+Configure miss: i686-generic-linux-gnu-gcc
+Configure miss: i686-generic-linux-gnu-ar
+Configure miss: i686-generic-linux-gnu-ranlib
 Configure miss: whether a statically linked program can dlopen itself
-Configure miss: i686-generic-linux-gnu-pkg-config
 Configure miss: win32
 Configure miss: ucred.h usability
 Configure miss: ucred.h presence
 Configure miss: ucred.h
-Configure miss: getprogname
-Configure miss: getexecname
 Configure miss: strnstr
 Configure miss: memdup
-Configure miss: getpeereid
-Configure miss: getpeerucred
 Configure miss: whether program_invocation_short_name is declared
 Configure miss: whether __progname is declared
 Configure miss: dgettext in -lintl
-Configure miss: gtkdoc-check
-Configure miss: gtkdoc-rebase
-Configure miss: gtkdoc-mkpdf
-Configure miss: gtkdoc-scan
 Configure miss: xsltproc
 Configure miss: whether to build documentation
 Configure miss: build strict

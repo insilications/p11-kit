@@ -5,17 +5,18 @@
 # Source0 file verified with key 0xD605848ED7E69871 (ueno@gnu.org)
 #
 Name     : p11-kit
-Version  : 0.23.8
-Release  : 51
-URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
-Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz
-Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.8/p11-kit-0.23.8.tar.gz.sig
+Version  : 0.23.14
+Release  : 52
+URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz
+Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz
+Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz.sig
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: p11-kit-bin
+Requires: p11-kit-config
 Requires: p11-kit-lib
-Requires: p11-kit-doc
+Requires: p11-kit-license
 Requires: p11-kit-data
 Requires: ca-certs
 Requires: findutils
@@ -24,27 +25,39 @@ BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
+BuildRequires : gtk-doc
+BuildRequires : intltool-dev
+BuildRequires : pkg-config
 BuildRequires : pkgconfig(32libffi)
+BuildRequires : pkgconfig(32libsystemd)
 BuildRequires : pkgconfig(32libtasn1)
 BuildRequires : pkgconfig(libffi)
+BuildRequires : pkgconfig(libsystemd)
 BuildRequires : pkgconfig(libtasn1)
-Patch1: 0001-Fix-test-case.patch
-Patch2: 0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
-Patch3: 0003-Use-p11-trust-instead-of-trust.patch
+Patch1: 0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
+Patch2: 0003-Use-p11-trust-instead-of-trust.patch
 
 %description
-P11-KIT
-Provides a way to load and enumerate PKCS#11 modules. Provides a standard
-configuration setup for installing PKCS#11 modules in such a way that they're
-discoverable.
+# P11-KIT
+[![Build Status](https://travis-ci.org/p11-glue/p11-kit.svg?branch=master)](https://travis-ci.org/p11-glue/p11-kit) [![Coverage Status](https://img.shields.io/coveralls/p11-glue/p11-kit.svg)](https://coveralls.io/r/p11-glue/p11-kit) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1627/badge)](https://bestpractices.coreinfrastructure.org/en/projects/1627)
 
 %package bin
 Summary: bin components for the p11-kit package.
 Group: Binaries
-Requires: p11-kit-data
+Requires: p11-kit-data = %{version}-%{release}
+Requires: p11-kit-config = %{version}-%{release}
+Requires: p11-kit-license = %{version}-%{release}
 
 %description bin
 bin components for the p11-kit package.
+
+
+%package config
+Summary: config components for the p11-kit package.
+Group: Default
+
+%description config
+config components for the p11-kit package.
 
 
 %package data
@@ -58,10 +71,10 @@ data components for the p11-kit package.
 %package dev
 Summary: dev components for the p11-kit package.
 Group: Development
-Requires: p11-kit-lib
-Requires: p11-kit-bin
-Requires: p11-kit-data
-Provides: p11-kit-devel
+Requires: p11-kit-lib = %{version}-%{release}
+Requires: p11-kit-bin = %{version}-%{release}
+Requires: p11-kit-data = %{version}-%{release}
+Provides: p11-kit-devel = %{version}-%{release}
 
 %description dev
 dev components for the p11-kit package.
@@ -70,10 +83,10 @@ dev components for the p11-kit package.
 %package dev32
 Summary: dev32 components for the p11-kit package.
 Group: Default
-Requires: p11-kit-lib32
-Requires: p11-kit-bin
-Requires: p11-kit-data
-Requires: p11-kit-dev
+Requires: p11-kit-lib32 = %{version}-%{release}
+Requires: p11-kit-bin = %{version}-%{release}
+Requires: p11-kit-data = %{version}-%{release}
+Requires: p11-kit-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the p11-kit package.
@@ -90,7 +103,8 @@ doc components for the p11-kit package.
 %package lib
 Summary: lib components for the p11-kit package.
 Group: Libraries
-Requires: p11-kit-data
+Requires: p11-kit-data = %{version}-%{release}
+Requires: p11-kit-license = %{version}-%{release}
 
 %description lib
 lib components for the p11-kit package.
@@ -99,19 +113,27 @@ lib components for the p11-kit package.
 %package lib32
 Summary: lib32 components for the p11-kit package.
 Group: Default
-Requires: p11-kit-data
+Requires: p11-kit-data = %{version}-%{release}
+Requires: p11-kit-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the p11-kit package.
 
 
+%package license
+Summary: license components for the p11-kit package.
+Group: Default
+
+%description license
+license components for the p11-kit package.
+
+
 %prep
-%setup -q -n p11-kit-0.23.8
+%setup -q -n p11-kit-0.23.14
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 pushd ..
-cp -a p11-kit-0.23.8 build32
+cp -a p11-kit-0.23.14 build32
 popd
 
 %build
@@ -119,13 +141,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507396368
+export SOURCE_DATE_EPOCH=1537285859
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
@@ -133,7 +155,7 @@ export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 popd
 %check
 export LANG=C
@@ -141,10 +163,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
+cd ../build32;
+make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1507396368
+export SOURCE_DATE_EPOCH=1537285859
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/doc/p11-kit
+cp COPYING %{buildroot}/usr/share/doc/p11-kit/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -155,11 +181,11 @@ popd
 fi
 popd
 %make_install
-## make_install_append content
+## install_append content
 mv %{buildroot}/usr/bin/trust %{buildroot}/usr/bin/p11-trust
 install -m 0755 trust-stub %{buildroot}/usr/bin/trust
 ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
-## make_install_append end
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -172,6 +198,11 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/libexec/p11-kit/p11-kit-remote
 /usr/libexec/p11-kit/p11-kit-server
 /usr/libexec/p11-kit/trust-extract-compat
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/systemd/user/p11-kit-server.service
+/usr/lib/systemd/user/p11-kit-server.socket
 
 %files data
 %defattr(-,root,root,-)
@@ -195,7 +226,7 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/lib32/pkgconfig/p11-kit-1.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/gtk-doc/html/p11-kit/config-example.html
 /usr/share/gtk-doc/html/p11-kit/config-files.html
 /usr/share/gtk-doc/html/p11-kit/config.html
@@ -221,6 +252,7 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/share/gtk-doc/html/p11-kit/p11-kit.html
 /usr/share/gtk-doc/html/p11-kit/pkcs11-conf.html
 /usr/share/gtk-doc/html/p11-kit/reference.html
+/usr/share/gtk-doc/html/p11-kit/remoting.html
 /usr/share/gtk-doc/html/p11-kit/right-insensitive.png
 /usr/share/gtk-doc/html/p11-kit/right.png
 /usr/share/gtk-doc/html/p11-kit/sharing-managed.html
@@ -253,3 +285,7 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/lib32/p11-kit-proxy.so
 /usr/lib32/pkcs11/p11-kit-client.so
 /usr/lib32/pkcs11/p11-kit-trust.so
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/p11-kit/COPYING

@@ -41,6 +41,7 @@ libp11-kit.so.0:p11_kit_modules_initialize
 libp11-kit.so.0:p11_kit_modules_load
 libp11-kit.so.0:p11_kit_modules_load_and_initialize
 libp11-kit.so.0:p11_kit_modules_release
+libp11-kit.so.0:p11_kit_override_system_files
 libp11-kit.so.0:p11_kit_pin_file_callback
 libp11-kit.so.0:p11_kit_pin_get_length
 libp11-kit.so.0:p11_kit_pin_get_value
