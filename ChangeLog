@@ -1,5 +1,387 @@
 # Generate automatically. Do not edit.
 
+commit 1ba80c67c492f25581ed97c8c31ffb5f20636d06
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2019-01-14
+
+    Release 0.23.15
+
+ NEWS         | 8 ++++++++
+ configure.ac | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+commit f277a1469aef05d3542e8ae9fd3f5dbadbe12463
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2019-01-11
+
+    pem: Fix assert condition
+    
+    If the PEM header is "-----BEGIN -----", *type should be an empty
+    string and the parser shouldn't fail.  Reported by Han Han in:
+    https://bugzilla.redhat.com/show_bug.cgi?id=1665172
+
+ trust/pem.c      |  2 +-
+ trust/test-pem.c | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+commit bebf4f3442ea5cdaa3a9fa2d0fee366e7264a227
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2019-01-09
+
+    test: Add test that exercises duplicated certs in JKS
+
+ trust/extract-jks.c            |   2 +-
+ trust/fixtures/duplicated.jks  | Bin 0 -> 2122 bytes
+ trust/fixtures/duplicated1.der | Bin 0 -> 1010 bytes
+ trust/fixtures/duplicated2.der | Bin 0 -> 1010 bytes
+ trust/fixtures/multiple.jks    | Bin 2556 -> 2567 bytes
+ trust/test-jks.c               |  58 ++++++++++++++++++++++++++++++++++++++---
+ 6 files changed, 55 insertions(+), 5 deletions(-)
+
+commit 7289639cf41df1840002e865bf700f50afec523c
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2019-01-09
+
+    trust: Fix alias generation in JKS extractor
+    
+    When there is a duplicate, the JKS extractor previously assigned
+    somewhat obscure name "-<digit>" (not "<name>-<digit>").
+
+ trust/extract-jks.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 5e6a92b67ddade14a54769b05cc717043bc56b78
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-12-25
+
+    trust: Continue parsing if the file cannot be read as persist format
+    
+    A corrupted file that contains "[p11-kit-object-v1]" can be a valid
+    PEM certs file.  Continue with the next format if it cannot be read as
+    a persistent format.
+
+ trust/parser.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 4aa6ef9e82f6bb14746a47a7d56789d5e982a1f5
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-12-25
+
+    trust: p11_token_load: Treat parse error as failure
+    
+    Those conditions can happen when the trust file is corrupted, so it
+    makes more sense to treat them as a failure instead of programmer
+    error.
+
+ trust/token.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+commit eb503f3a1467f21a5ecc9ae84ae23b216afc102f
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-12-25
+
+    trust: Fail if trust anchors are not loaded from a file
+    
+    If the trust path is a file, treat parse error as fatal and abort the
+    C_FindObjectsInit call.
+
+ trust/module.c | 11 ++++++++---
+ trust/token.c  |  6 +++---
+ 2 files changed, 11 insertions(+), 6 deletions(-)
+
+commit 0dd62395788ae566d3adef967611bce214a04435
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-12-23
+
+    trust: Propagate library verbosity to module through init_args
+    
+    Previously, even when the -v option is used with the 'trust' command,
+    the messages from p11-kit-trust.so module were suppressed because the
+    verbosity setting is not propagated to the module.
+
+ common/message.c           |  8 ++++----
+ p11-kit/modules.c          | 29 +++++++++++++++++++++++------
+ p11-kit/p11-kit.h          |  3 ++-
+ trust/enumerate.c          | 11 +++++++++--
+ trust/module.c             |  5 +++++
+ trust/p11-kit-trust.module |  4 ++++
+ 6 files changed, 47 insertions(+), 13 deletions(-)
+
+commit 95faa51a23fc416e718dbd740adfce31f642530b
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-12-29
+
+    build: Fix typo spotted by codespell
+
+ ChangeLog                     | 2 +-
+ NEWS                          | 8 ++++----
+ common/pkcs11.h               | 2 +-
+ common/test-lexer.c           | 2 +-
+ doc/manual/Makefile.am        | 2 +-
+ p11-kit/iter.c                | 2 +-
+ p11-kit/modules.c             | 2 +-
+ p11-kit/rpc-message.c         | 6 +++---
+ p11-kit/rpc-server.c          | 4 ++--
+ p11-kit/test-pin.c            | 2 +-
+ p11-kit/test-virtual.c        | 2 +-
+ trust/test-enumerate.c        | 2 +-
+ trust/test-parser.c           | 2 +-
+ trust/test-token.c            | 4 ++--
+ trust/trust-extract-compat.in | 2 +-
+ 15 files changed, 22 insertions(+), 22 deletions(-)
+
+commit 4ee6545d0188e495f195b7fe5abbe9cc382a626d
+Author: Jakub Jelen <jjelen@redhat.com>
+Date:   2018-12-06
+
+    doc: Make log-calls match the rest of the document style
+
+ doc/manual/pkcs11.conf.xml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit b9eceda29965af989ad2150082454ae353266fa5
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-11-23
+
+    build: Simplify assertions
+    
+    Let it leak memory when we assert, so not to confuse static analyzers
+    as if this is the normal case.
+
+ common/test.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+commit b92e8c7f5c082a55073903d53293e6aeecb9d0ed
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-11-22
+
+    travis: Add cppcheck profile
+
+ .travis.yml                        |  4 ++++
+ .travis/cppcheck/after_failure.sh  |  3 +++
+ .travis/cppcheck/before_install.sh |  9 +++++++++
+ .travis/cppcheck/install.sh        | 14 ++++++++++++++
+ .travis/cppcheck/script.sh         |  3 +++
+ 5 files changed, 33 insertions(+)
+
+commit d293fd54c754190da333496df070992e2d803a87
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-11-22
+
+    travis: Allow profile override
+
+ .travis.yml | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+commit f0c82b07f8b31a4b86de32436cb4f5053de16336
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-11-22
+
+    build: Suppress cppcheck errors
+
+ common/test-tests.c  |  2 ++
+ common/test.c        |  4 ++++
+ p11-kit/server.c     |  8 ++++++--
+ trust/test-bundle.c  |  9 ++++++---
+ trust/test-openssl.c |  9 ++++++---
+ trust/test-save.c    | 22 +++++++++++++++-------
+ trust/test-trust.c   |  4 +++-
+ 7 files changed, 42 insertions(+), 16 deletions(-)
+
+commit 8287689158403090b5828a568b122b5b3a3ce987
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-22
+
+    tests: Ensure p11_proxy_module_cleanup is called
+    
+    Reported and suggested in #197.
+
+ p11-kit/test-proxy.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit f758142178b4cc5c650dde75152bfb85ac992178
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-15
+
+    url: Prefer upper-case letters in hex characters when encoding
+    
+    This makes it more compliant with RFC 3986, where the use of
+    upper-case letters is recommended (as "SHOULD").
+    
+    Suggested by Sumit Bose.
+
+ common/test-path.c |  2 +-
+ common/test-url.c  | 28 ++++++++++++++++++++++++++++
+ common/url.c       | 24 +++++++++++++++++-------
+ p11-kit/test-uri.c | 14 +++++++-------
+ 4 files changed, 53 insertions(+), 15 deletions(-)
+
+commit e81f6af7ed3b39b8df0bb7ce150619ea8178d47c
+Author: Harald Hoyer <harald@redhat.com>
+Date:   2018-11-02
+
+    trust/extract-jks.c: also honor SOURCE_DATE_EPOCH time
+    
+    For reproducible builds, accept a define timestamp for the java
+    keystore.
+    
+    See https://reproducible-builds.org/docs/source-date-epoch/
+
+ trust/extract-jks.c | 38 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 4 deletions(-)
+
+commit 1d6913d5a551b6bd8efaa1705178e49f1527aa7e
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-30
+
+    build: Require pkg.m4 >= 0.29 at bootstrap
+
+ configure.ac | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit 6e1046de2233fba7875d3d6a1b260192678dd0ad
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-19
+
+    virtual: Prefer fixed closures to libffi closures
+    
+    On some circumstances (such as when loading p11-kit-proxy from httpd),
+    it is known that creation of libffi closure always fails, due to
+    SELinux policy.  Although this is harmless, it pollutes the journal
+    and gives wrong hints when troubleshooting.  This patch changes the
+    order of preference of libffi vs pre-compiled closures to avoid that.
+
+ p11-kit/virtual.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+commit 83e92c2f9575707083d8b0c70ef330e285d70836
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-17
+
+    trust: Check index->buckets is allocated on cleanup
+
+ trust/index.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+commit 6417780ebbbbb0f01ddb001b239347655fb98578
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-17
+
+    rpc-server: Check calloc failure
+
+ p11-kit/rpc-server.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+commit da73c2804b3ca962fa51473bb4c303a5ed32d4a1
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    trust: Set umask before calling mkstemp
+
+ trust/save.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit 033cd90806cb1e2eab7e799703757abc2f07052e
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    proxy: Fix null dereference when reusing slots
+
+ p11-kit/proxy.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit 1f78cb0b4dd193ec1f1b2b424a497a6c2edec043
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    rpc-server: p11_kit_remote_serve_tokens: Fix memleak
+
+ p11-kit/rpc-server.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+commit 213ea0815ef45411bf6c134918b79d2aad69c1dc
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    build: Check return value of p11_rpc_buffer_get_uint64
+
+ p11-kit/rpc-client.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 06323aed926ddc67bd18ed98e5af92035a8e3d39
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    build: Check return value of p11_dict_set
+
+ p11-kit/proxy.c      | 3 ++-
+ p11-kit/rpc-server.c | 6 +++++-
+ trust/module.c       | 3 ++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+commit b10dadce5a3c921149b2c9fe0dec614f8076ebda
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    build: Free memory before return{,_val}_if_* macros
+
+ p11-kit/iter.c  |  5 ++++-
+ p11-kit/proxy.c | 10 ++++++++--
+ trust/asn1.c    | 15 ++++++++++++---
+ trust/builder.c |  5 ++++-
+ trust/index.c   | 10 ++++++++--
+ trust/persist.c |  5 ++++-
+ trust/save.c    | 29 +++++++++++++++++++++++++----
+ trust/session.c | 10 ++++++++--
+ trust/token.c   |  5 ++++-
+ 9 files changed, 77 insertions(+), 17 deletions(-)
+
+commit c76197ddbbd0c29adc2bceff2ee9f740f71d134d
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    build: Call va_end() always when leaving the function
+
+ common/attrs.c  | 4 +++-
+ common/compat.c | 5 ++++-
+ common/path.c   | 5 ++++-
+ trust/parser.c  | 4 +++-
+ 4 files changed, 14 insertions(+), 4 deletions(-)
+
+commit 8a8db182af533a43b4d478d28af8623035475d68
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-10-16
+
+    debug: Work around cppcheck false-positives
+    
+    https://trac.cppcheck.net/ticket/8794
+
+ common/debug.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+commit f4a9fa674e17cc470d9280237032f18a70313d8e
+Author: Leonardo Brondani Schenkel <leo@tradeshift.com>
+Date:   2018-05-28
+
+    common: use /proc only on Linux
+    
+    Non-Linux systems do not have /proc, so do not attempt to open it and
+    eliminate an unnecessary access() syscall on those systems.
+
+ common/compat.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit 7f1df14e041c6de9603a4720753ca8f31e32b4ff
+Author: Daiki Ueno <dueno@redhat.com>
+Date:   2018-08-31
+
+    pkcs11: Don't redefine CKM_CAMELLIA_KEY_GEN
+    
+    Also reorder the CKM_CAMELLIA_* definitions.
+
+ common/pkcs11.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
 commit 3770793f026e46a000d2d8816d56122598289d5c
 Author: Daiki Ueno <dueno@redhat.com>
 Date:   2018-08-28

@@ -5,19 +5,20 @@
 # Source0 file verified with key 0xD605848ED7E69871 (ueno@gnu.org)
 #
 Name     : p11-kit
-Version  : 0.23.14
-Release  : 53
-URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz
-Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz
-Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz.sig
+Version  : 0.23.15
+Release  : 54
+URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz
+Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz
+Source99 : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz.sig
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
-Requires: p11-kit-bin
-Requires: p11-kit-config
-Requires: p11-kit-lib
-Requires: p11-kit-license
-Requires: p11-kit-data
+Requires: p11-kit-bin = %{version}-%{release}
+Requires: p11-kit-data = %{version}-%{release}
+Requires: p11-kit-lib = %{version}-%{release}
+Requires: p11-kit-libexec = %{version}-%{release}
+Requires: p11-kit-license = %{version}-%{release}
+Requires: p11-kit-services = %{version}-%{release}
 Requires: ca-certs
 Requires: findutils
 BuildRequires : gcc-dev32
@@ -46,19 +47,12 @@ Patch3: 0003-Use-p11-trust-instead-of-trust.patch
 Summary: bin components for the p11-kit package.
 Group: Binaries
 Requires: p11-kit-data = %{version}-%{release}
-Requires: p11-kit-config = %{version}-%{release}
+Requires: p11-kit-libexec = %{version}-%{release}
 Requires: p11-kit-license = %{version}-%{release}
+Requires: p11-kit-services = %{version}-%{release}
 
 %description bin
 bin components for the p11-kit package.
-
-
-%package config
-Summary: config components for the p11-kit package.
-Group: Default
-
-%description config
-config components for the p11-kit package.
 
 
 %package data
@@ -105,6 +99,7 @@ doc components for the p11-kit package.
 Summary: lib components for the p11-kit package.
 Group: Libraries
 Requires: p11-kit-data = %{version}-%{release}
+Requires: p11-kit-libexec = %{version}-%{release}
 Requires: p11-kit-license = %{version}-%{release}
 
 %description lib
@@ -121,6 +116,15 @@ Requires: p11-kit-license = %{version}-%{release}
 lib32 components for the p11-kit package.
 
 
+%package libexec
+Summary: libexec components for the p11-kit package.
+Group: Default
+Requires: p11-kit-license = %{version}-%{release}
+
+%description libexec
+libexec components for the p11-kit package.
+
+
 %package license
 Summary: license components for the p11-kit package.
 Group: Default
@@ -129,13 +133,21 @@ Group: Default
 license components for the p11-kit package.
 
 
+%package services
+Summary: services components for the p11-kit package.
+Group: Systemd services
+
+%description services
+services components for the p11-kit package.
+
+
 %prep
-%setup -q -n p11-kit-0.23.14
+%setup -q -n p11-kit-0.23.15
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 pushd ..
-cp -a p11-kit-0.23.14 build32
+cp -a p11-kit-0.23.15 build32
 popd
 
 %build
@@ -143,7 +155,8 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1537296829
+export SOURCE_DATE_EPOCH=1551465063
+export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
@@ -153,9 +166,10 @@ make  %{?_smp_mflags}
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-export CFLAGS="$CFLAGS -m32"
-export CXXFLAGS="$CXXFLAGS -m32"
-export LDFLAGS="$LDFLAGS -m32"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
 %configure --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}
 popd
@@ -166,13 +180,13 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1537296829
+export SOURCE_DATE_EPOCH=1551465063
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/p11-kit
-cp COPYING %{buildroot}/usr/share/doc/p11-kit/COPYING
+mkdir -p %{buildroot}/usr/share/package-licenses/p11-kit
+cp COPYING %{buildroot}/usr/share/package-licenses/p11-kit/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -197,14 +211,6 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/bin/p11-kit
 /usr/bin/p11-trust
 /usr/bin/trust
-/usr/libexec/p11-kit/p11-kit-remote
-/usr/libexec/p11-kit/p11-kit-server
-/usr/libexec/p11-kit/trust-extract-compat
-
-%files config
-%defattr(-,root,root,-)
-/usr/lib/systemd/user/p11-kit-server.service
-/usr/lib/systemd/user/p11-kit-server.socket
 
 %files data
 %defattr(-,root,root,-)
@@ -288,6 +294,17 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/lib32/pkcs11/p11-kit-client.so
 /usr/lib32/pkcs11/p11-kit-trust.so
 
-%files license
+%files libexec
 %defattr(-,root,root,-)
-/usr/share/doc/p11-kit/COPYING
+/usr/libexec/p11-kit/p11-kit-remote
+/usr/libexec/p11-kit/p11-kit-server
+/usr/libexec/p11-kit/trust-extract-compat
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/p11-kit/COPYING
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/user/p11-kit-server.service
+/usr/lib/systemd/user/p11-kit-server.socket
