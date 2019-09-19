@@ -7,7 +7,6 @@ Configure miss: memdup
 Configure miss: whether program_invocation_short_name is declared
 Configure miss: whether __progname is declared
 Configure miss: dgettext in -lintl
-Configure miss: xsltproc
 Configure miss: whether to build documentation
 Configure miss: build strict
 Configure miss: whether to build with gcov testing
@@ -21,7 +20,6 @@ Configure miss: memdup
 Configure miss: whether program_invocation_short_name is declared
 Configure miss: whether __progname is declared
 Configure miss: dgettext in -lintl
-Configure miss: xsltproc
 Configure miss: whether to build documentation
 Configure miss: build strict
 Configure miss: whether to build with gcov testing
