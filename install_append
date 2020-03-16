@@ -1,3 +1,2 @@
 mv %{buildroot}/usr/bin/trust %{buildroot}/usr/bin/p11-trust
 install -m 0755 trust-stub %{buildroot}/usr/bin/trust
-ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so

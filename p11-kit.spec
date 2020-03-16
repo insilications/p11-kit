@@ -6,10 +6,10 @@
 #
 Name     : p11-kit
 Version  : 0.23.15
-Release  : 55
+Release  : 56
 URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz
 Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz
-Source1 : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz.sig
+Source1  : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz.sig
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -146,6 +146,7 @@ services components for the p11-kit package.
 
 %prep
 %setup -q -n p11-kit-0.23.15
+cd %{_builddir}/p11-kit-0.23.15
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -158,7 +159,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1568874136
+export SOURCE_DATE_EPOCH=1584384421
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
@@ -186,10 +187,10 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1568874136
+export SOURCE_DATE_EPOCH=1584384421
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/p11-kit
-cp COPYING %{buildroot}/usr/share/package-licenses/p11-kit/COPYING
+cp %{_builddir}/p11-kit-0.23.15/COPYING %{buildroot}/usr/share/package-licenses/p11-kit/6745330da3e7bde244b20b96a42eae659644e731
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -206,7 +207,6 @@ rm -f %{buildroot}%{_libdir}/p11-kit/trust-extract-compat
 ## install_append content
 mv %{buildroot}/usr/bin/trust %{buildroot}/usr/bin/p11-trust
 install -m 0755 trust-stub %{buildroot}/usr/bin/trust
-ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 ## install_append end
 
 %files
@@ -283,7 +283,6 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libnssckbi.so
 /usr/lib64/libp11-kit.so
 /usr/lib64/libp11-kit.so.0
 /usr/lib64/libp11-kit.so.0.3.0
@@ -308,7 +307,7 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/p11-kit/COPYING
+/usr/share/package-licenses/p11-kit/6745330da3e7bde244b20b96a42eae659644e731
 
 %files services
 %defattr(-,root,root,-)
