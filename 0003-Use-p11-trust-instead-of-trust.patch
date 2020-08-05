@@ -1,7 +1,7 @@
-From 8a18ec62f99ea4682f20bea087af17558780c6d4 Mon Sep 17 00:00:00 2001
-From: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
-Date: Mon, 25 Sep 2017 17:41:48 +0000
-Subject: [PATCH] Use p11-trust instead of trust.
+From 1e3030513b72c69390b39542d3ff19a2421735da Mon Sep 17 00:00:00 2001
+From: insilications <boboniboni@gmail.com>
+Date: Wed, 5 Aug 2020 06:03:58 -0300
+Subject: [PATCH 3/3] Use p11-trust instead of trust.
 
 Clear Linux provides a stub instead of 'trust' to avoid using it for
 trust store management. The native p11-kit 'trust' command is provided
@@ -14,29 +14,27 @@ This change:
 
 NB: The build instals 'trust-stub' as 'trust'. And 'trust' as
 'p11-trust' in the package.
-
-Signed-off-by: Arzhan Kinzhalin <arzhan.i.kinzhalin@intel.com>
 ---
  p11-kit/p11-kit.c |  2 +-
  trust-stub        | 11 +++++++++++
  2 files changed, 12 insertions(+), 1 deletion(-)
- create mode 100644 trust-stub
+ create mode 100755 trust-stub
 
 diff --git a/p11-kit/p11-kit.c b/p11-kit/p11-kit.c
-index 7a90046..fabb230 100644
+index 37ffc79..ba8d623 100644
 --- a/p11-kit/p11-kit.c
 +++ b/p11-kit/p11-kit.c
-@@ -76,7 +76,7 @@ p11_kit_trust (int argc,
+@@ -77,7 +77,7 @@ p11_kit_trust (int argc,
  	args = calloc (argc + 2, sizeof (char *));
  	return_val_if_fail (args != NULL, 1);
  
 -	args[0] = BINDIR "/trust";
-+	args[0] = BINDIR "/p11-trust";
++    args[0] = BINDIR "/p11-trust";
  	memcpy (args + 1, argv, sizeof (char *) * argc);
  	args[argc + 1] = NULL;
  
 diff --git a/trust-stub b/trust-stub
-new file mode 100644
+new file mode 100755
 index 0000000..56402cd
 --- /dev/null
 +++ b/trust-stub
@@ -53,5 +51,5 @@ index 0000000..56402cd
 +
 +exit 1
 -- 
-2.14.2
+2.27.0
 

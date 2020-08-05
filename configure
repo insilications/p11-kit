@@ -1,1 +1,1 @@
---with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
+--enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal

@@ -1,4 +1,6 @@
 # This file contains recursive sources that require this package
 clrtrust
 compat-nettle-soname6
+compat-nettle-soname7
+ffmpeg
 nettle

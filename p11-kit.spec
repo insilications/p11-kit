@@ -4,12 +4,13 @@
 #
 # Source0 file verified with key 0xD605848ED7E69871 (ueno@gnu.org)
 #
+%define keepstatic 1
 Name     : p11-kit
-Version  : 0.23.15
-Release  : 56
-URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz
-Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz
-Source1  : https://github.com/p11-glue/p11-kit/releases/download/0.23.15/p11-kit-0.23.15.tar.gz.sig
+Version  : 0.23.20
+Release  : 57
+URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz
+Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz
+Source1  : https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz.sig
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -17,10 +18,11 @@ Requires: p11-kit-bin = %{version}-%{release}
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-lib = %{version}-%{release}
 Requires: p11-kit-libexec = %{version}-%{release}
-Requires: p11-kit-license = %{version}-%{release}
 Requires: p11-kit-services = %{version}-%{release}
 Requires: ca-certs
 Requires: findutils
+BuildRequires : buildreq-configure
+BuildRequires : buildreq-meson
 BuildRequires : ca-certs
 BuildRequires : findutils
 BuildRequires : gcc-dev32
@@ -30,13 +32,22 @@ BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : gtk-doc
 BuildRequires : intltool-dev
+BuildRequires : libffi-dev
+BuildRequires : libffi-dev32
+BuildRequires : libffi-staticdev
+BuildRequires : libffi-staticdev32
 BuildRequires : pkg-config
+BuildRequires : pkgconfig(32glib-2.0)
 BuildRequires : pkgconfig(32libffi)
 BuildRequires : pkgconfig(32libsystemd)
 BuildRequires : pkgconfig(32libtasn1)
+BuildRequires : pkgconfig(glib-2.0)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : pkgconfig(libsystemd)
 BuildRequires : pkgconfig(libtasn1)
+# Suppress stripping binaries
+%define __strip /bin/true
+%define debug_package %{nil}
 Patch1: 0001-Modify-token-tests-to-reflect-the-mockroot-permissio.patch
 Patch2: 0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
 Patch3: 0003-Use-p11-trust-instead-of-trust.patch
@@ -50,7 +61,6 @@ Summary: bin components for the p11-kit package.
 Group: Binaries
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-libexec = %{version}-%{release}
-Requires: p11-kit-license = %{version}-%{release}
 Requires: p11-kit-services = %{version}-%{release}
 
 %description bin
@@ -103,7 +113,6 @@ Summary: lib components for the p11-kit package.
 Group: Libraries
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-libexec = %{version}-%{release}
-Requires: p11-kit-license = %{version}-%{release}
 
 %description lib
 lib components for the p11-kit package.
@@ -113,7 +122,6 @@ lib components for the p11-kit package.
 Summary: lib32 components for the p11-kit package.
 Group: Default
 Requires: p11-kit-data = %{version}-%{release}
-Requires: p11-kit-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the p11-kit package.
@@ -122,18 +130,9 @@ lib32 components for the p11-kit package.
 %package libexec
 Summary: libexec components for the p11-kit package.
 Group: Default
-Requires: p11-kit-license = %{version}-%{release}
 
 %description libexec
 libexec components for the p11-kit package.
-
-
-%package license
-Summary: license components for the p11-kit package.
-Group: Default
-
-%description license
-license components for the p11-kit package.
 
 
 %package services
@@ -145,52 +144,90 @@ services components for the p11-kit package.
 
 
 %prep
-%setup -q -n p11-kit-0.23.15
-cd %{_builddir}/p11-kit-0.23.15
+%setup -q -n p11-kit-0.23.20
+cd %{_builddir}/p11-kit-0.23.20
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 pushd ..
-cp -a p11-kit-0.23.15 build32
+cp -a p11-kit-0.23.20 build32
 popd
 
 %build
-export http_proxy=http://127.0.0.1:9/
-export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost,127.0.0.1,0.0.0.0
+unset http_proxy
+unset https_proxy
+unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1584384421
+export SOURCE_DATE_EPOCH=1596618597
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
-%configure --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
+## altflags_pgo content
+## pgo generate
+export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage --coverage -fprofile-partial-training"
+export CFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+export FFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+## pgo use
+## -ffat-lto-objects -fno-PIE -fno-PIE -m64 -no-pie -fpic -fvisibility=hidden
+## gcc: -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -fno-common
+export PGO_USE="-fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-correction -fprofile-partial-training"
+export CFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe $PGO_USE"
+export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+#export CCACHE_DISABLE=1
+## altflags_pgo end
+export CFLAGS="${CFLAGS_GENERATE}"
+export CXXFLAGS="${CXXFLAGS_GENERATE}"
+export FFLAGS="${FFLAGS_GENERATE}"
+export FCFLAGS="${FCFLAGS_GENERATE}"
+export LDFLAGS="${LDFLAGS_GENERATE}"
+%configure  --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
+make  %{?_smp_mflags}
+
+make VERBOSE=1 V=1 %{?_smp_mflags} check
+make clean
+export CFLAGS="${CFLAGS_USE}"
+export CXXFLAGS="${CXXFLAGS_USE}"
+export FFLAGS="${FFLAGS_USE}"
+export FCFLAGS="${FCFLAGS_USE}"
+export LDFLAGS="${LDFLAGS_USE}"
+%configure  --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
 make  %{?_smp_mflags}
 
 pushd ../build32/
+export CFLAGS="-g -O3 -march=native -mtune=native -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe"
+export CXXFLAGS="-g -O3 -march=native -mtune=native -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe"
+export LDFLAGS="-g -O3 -march=native -mtune=native -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe"
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
-%configure --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+%configure  --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}
 popd
+
 %check
 export LANG=C.UTF-8
-export http_proxy=http://127.0.0.1:9/
-export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+unset http_proxy
+unset https_proxy
+unset no_proxy
+make %{?_smp_mflags} check || :
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1584384421
+export SOURCE_DATE_EPOCH=1596618597
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/package-licenses/p11-kit
-cp %{_builddir}/p11-kit-0.23.15/COPYING %{buildroot}/usr/share/package-licenses/p11-kit/6745330da3e7bde244b20b96a42eae659644e731
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -232,10 +269,14 @@ install -m 0755 trust-stub %{buildroot}/usr/bin/trust
 /usr/include/p11-kit-1/p11-kit/pkcs11x.h
 /usr/include/p11-kit-1/p11-kit/remote.h
 /usr/include/p11-kit-1/p11-kit/uri.h
+/usr/lib64/libp11-kit.so
+/usr/lib64/p11-kit-proxy.so
 /usr/lib64/pkgconfig/p11-kit-1.pc
 
 %files dev32
 %defattr(-,root,root,-)
+/usr/lib32/libp11-kit.so
+/usr/lib32/p11-kit-proxy.so
 /usr/lib32/pkgconfig/32p11-kit-1.pc
 /usr/lib32/pkgconfig/p11-kit-1.pc
 
@@ -283,19 +324,15 @@ install -m 0755 trust-stub %{buildroot}/usr/bin/trust
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libp11-kit.so
 /usr/lib64/libp11-kit.so.0
 /usr/lib64/libp11-kit.so.0.3.0
-/usr/lib64/p11-kit-proxy.so
 /usr/lib64/pkcs11/p11-kit-client.so
 /usr/lib64/pkcs11/p11-kit-trust.so
 
 %files lib32
 %defattr(-,root,root,-)
-/usr/lib32/libp11-kit.so
 /usr/lib32/libp11-kit.so.0
 /usr/lib32/libp11-kit.so.0.3.0
-/usr/lib32/p11-kit-proxy.so
 /usr/lib32/pkcs11/p11-kit-client.so
 /usr/lib32/pkcs11/p11-kit-trust.so
 
@@ -304,10 +341,6 @@ install -m 0755 trust-stub %{buildroot}/usr/bin/trust
 /usr/libexec/p11-kit/p11-kit-remote
 /usr/libexec/p11-kit/p11-kit-server
 /usr/libexec/p11-kit/trust-extract-compat
-
-%files license
-%defattr(0644,root,root,0755)
-/usr/share/package-licenses/p11-kit/6745330da3e7bde244b20b96a42eae659644e731
 
 %files services
 %defattr(-,root,root,-)

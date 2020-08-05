@@ -1,41 +1,41 @@
-From c24365c6af10411e12f53a2459f843e547014a63 Mon Sep 17 00:00:00 2001
-From: Michael Leibowitz <michael.leibowitz@intel.com>
-Date: Fri, 17 Jun 2016 18:32:38 +0000
-Subject: [PATCH] Added P11_TRUST_PATHS to override via env
+From 07179ede16a996b1d5dd7d1a3b21403b3f53300b Mon Sep 17 00:00:00 2001
+From: insilications <boboniboni@gmail.com>
+Date: Wed, 5 Aug 2020 06:01:01 -0300
+Subject: [PATCH 2/3] Added P11_TRUST_PATHS to override via env
 
 This addes the ability to set an environment variable to override the
 default placement of trusted cert store at runtime.
-
-Signed-off-by: Michael Leibowitz <michael.leibowitz@intel.com>
 ---
- trust/module.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ trust/module.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/trust/module.c b/trust/module.c
-index 7fce465..58e0243 100644
+index ec3333d..bca73ee 100644
 --- a/trust/module.c
 +++ b/trust/module.c
-@@ -382,6 +382,7 @@ sys_C_Initialize (CK_VOID_PTR init_args)
+@@ -395,6 +395,7 @@ sys_C_Initialize (CK_VOID_PTR init_args)
  		 */
  		} else if (rv == CKR_OK) {
  			p11_debug ("doing initialization");
-+			char *paths;
++            char *paths;
  
  			if (args->pReserved)
  				p11_argv_parse ((const char*)args->pReserved, parse_argument, NULL);
-@@ -391,7 +392,11 @@ sys_C_Initialize (CK_VOID_PTR init_args)
+@@ -404,8 +405,12 @@ sys_C_Initialize (CK_VOID_PTR init_args)
  			                            NULL, p11_session_free);
  
  			gl.tokens = p11_array_new ((p11_destroyer)p11_token_free);
 -			if (gl.tokens && !create_tokens_inlock (gl.tokens, gl.paths ? gl.paths : TRUST_PATHS))
-+			paths = secure_getenv("P11_TRUST_PATHS");
-+			if (!paths)
-+				paths = gl.paths ? gl.paths : TRUST_PATHS;
+-				gl.tokens = NULL;
++            paths = secure_getenv("P11_TRUST_PATHS");
++            if (!paths)
++                paths = gl.paths ? gl.paths : TRUST_PATHS;
 +
-+			if (gl.tokens && !create_tokens_inlock (gl.tokens, (const char*)paths))
- 				gl.tokens = NULL;
++            if (gl.tokens && !create_tokens_inlock (gl.tokens, (const char*)paths))
++                gl.tokens = NULL;
  
  			if (gl.sessions == NULL || gl.tokens == NULL) {
+ 				warn_if_reached ();
 -- 
-2.9.0
+2.27.0
 

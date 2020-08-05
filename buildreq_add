@@ -2,3 +2,17 @@
 # This file contains additional build requirements that did not get picked up
 # automatically. One name per line, no whitespace.
 #
+ca-certs
+findutils
+gcc-dev32
+gcc-libgcc32
+gcc-libstdc++32
+glibc-dev32
+glibc-libc32
+gtk-doc
+intltool-dev
+libffi-dev
+libffi-dev32
+libffi-staticdev
+libffi-staticdev32
+pkg-config
