@@ -16,3 +16,7 @@ libffi-dev32
 libffi-staticdev
 libffi-staticdev32
 pkg-config
+libtasn1-dev
+libtasn1-dev32
+libtasn1-staticdev
+libtasn1-staticdev32

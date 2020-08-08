@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : p11-kit
 Version  : 0.23.20
-Release  : 57
+Release  : 58
 URL      : https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz
 Source0  : https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz
 Source1  : https://github.com/p11-glue/p11-kit/releases/download/0.23.20/p11-kit-0.23.20.tar.xz.sig
@@ -36,6 +36,10 @@ BuildRequires : libffi-dev
 BuildRequires : libffi-dev32
 BuildRequires : libffi-staticdev
 BuildRequires : libffi-staticdev32
+BuildRequires : libtasn1-dev
+BuildRequires : libtasn1-dev32
+BuildRequires : libtasn1-staticdev
+BuildRequires : libtasn1-staticdev32
 BuildRequires : pkg-config
 BuildRequires : pkgconfig(32glib-2.0)
 BuildRequires : pkgconfig(32libffi)
@@ -158,7 +162,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1596618597
+export SOURCE_DATE_EPOCH=1596901707
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -187,23 +191,23 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%configure  --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
-make  %{?_smp_mflags}
+ %configure --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
+make  %{?_smp_mflags}  VERBOSE=1 V=1
 
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 make clean
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%configure  --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
-make  %{?_smp_mflags}
+%configure --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
+make  %{?_smp_mflags}  VERBOSE=1 V=1
 
 pushd ../build32/
-export CFLAGS="-g -O3 -march=native -mtune=native -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe"
-export CXXFLAGS="-g -O3 -march=native -mtune=native -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe"
-export LDFLAGS="-g -O3 -march=native -mtune=native -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe"
+export CFLAGS="-g -O3 -fuse-linker-plugin -pipe"
+export CXXFLAGS="-g -O3 -fuse-linker-plugin -fvisibility-inlines-hidden -pipe"
+export LDFLAGS="-g -O3 -fuse-linker-plugin -pipe"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -212,8 +216,8 @@ export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
-%configure  --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make  %{?_smp_mflags}
+%configure --enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make  %{?_smp_mflags}  VERBOSE=1 V=1
 popd
 
 %check
@@ -221,12 +225,12 @@ export LANG=C.UTF-8
 unset http_proxy
 unset https_proxy
 unset no_proxy
-make %{?_smp_mflags} check || :
+make %{?_smp_mflags} check
 cd ../build32;
-make %{?_smp_mflags} check || : || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1596618597
+export SOURCE_DATE_EPOCH=1596901707
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
