@@ -1,3 +1,2 @@
-0001-Modify-token-tests-to-reflect-the-mockroot-permissio.patch
-0002-Added-P11_TRUST_PATHS-to-override-via-env.patch
-0003-Use-p11-trust-instead-of-trust.patch
+0001-Added-P11_TRUST_PATHS-to-override-via-env.patch
+0002-Use-p11-trust-instead-of-trust.patch

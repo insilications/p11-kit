@@ -3,6 +3,7 @@
 # automatically. One name per line, no whitespace.
 #
 ca-certs
+ca-certs-static
 findutils
 gcc-dev32
 gcc-libgcc32
@@ -20,3 +21,9 @@ libtasn1-dev
 libtasn1-dev32
 libtasn1-staticdev
 libtasn1-staticdev32
+ccache
+openssl
+openssl-dev
+util-linux-bin
+util-linux-extras
+util-linux-dev

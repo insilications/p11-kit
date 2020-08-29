@@ -9,3 +9,6 @@ libffi
 libsystemd
 32libtasn1
 libtasn1
+libcrypto
+libssl
+openssl

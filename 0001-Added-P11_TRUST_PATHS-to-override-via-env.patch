@@ -1,7 +1,7 @@
-From 07179ede16a996b1d5dd7d1a3b21403b3f53300b Mon Sep 17 00:00:00 2001
+From 68dbdc23c1e1408a16b26bdcdfa596c417f625d6 Mon Sep 17 00:00:00 2001
 From: insilications <boboniboni@gmail.com>
 Date: Wed, 5 Aug 2020 06:01:01 -0300
-Subject: [PATCH 2/3] Added P11_TRUST_PATHS to override via env
+Subject: [PATCH 1/2] Added P11_TRUST_PATHS to override via env
 
 This addes the ability to set an environment variable to override the
 default placement of trusted cert store at runtime.
