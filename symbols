@@ -99,5 +99,4 @@ libp11-kit.so.0:p11_kit_uri_set_pinfile
 libp11-kit.so.0:p11_kit_uri_set_slot_id
 libp11-kit.so.0:p11_kit_uri_set_unrecognized
 libp11-kit.so.0:p11_kit_uri_set_vendor_query
-libp11-kit.so.0:secure_getenv
 libp11-kit.so.0:strndup

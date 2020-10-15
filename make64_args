@@ -1,1 +1,0 @@
-LDFLAGS="${LDFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive"
