@@ -1,0 +1,4 @@
+find . -type f -name '*.txt' -exec sed -i 's:-lffi\b:/usr/lib64/libffi.a:g' {} \;
+find . -type f -name '*.ninja' -exec sed -i 's:-lffi\b:/usr/lib64/libffi.a:g' {} \;
+find . -type f -name '*.txt' -exec sed -i 's:-ltasn1\b:/usr/lib64/libtasn1.a:g' {} \; 
+find . -type f -name '*.ninja' -exec sed -i 's:-ltasn1\b:/usr/lib64/libtasn1.a:g' {} \; 

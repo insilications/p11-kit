@@ -1,1 +1,1 @@
---enable-shared --disable-static --with-trust-paths=/var/cache/ca-certs --with-hash-impl=internal
+-Dgtk_doc=false -Dman=false -Dtrust_paths=/var/cache/ca-certs -Dhash_impl=internal -Dtest=true
