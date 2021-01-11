@@ -1,1 +1,1 @@
--Dgtk_doc=false -Dman=false -Dtrust_paths=/var/cache/ca-certs -Dhash_impl=internal -Dtest=true
+-Dgtk_doc=false -Dman=false -Dtrust_paths=/var/cache/ca-certs -Dhash_impl=internal -Dtest=true -Dlibffi=enabled
