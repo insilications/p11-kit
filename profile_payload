@@ -1,3 +1,6 @@
-#find . -type f -name 'Makefile' -exec sed -i 's:-lffi\b:-Wl,--whole-archive,/usr/lib64/libtasn1.a,/usr/lib64/libffi.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
-#find . -type f -name 'Makefile' -exec sed -i 's:-ltasn1\b:-Wl,--whole-archive,/usr/lib64/libtasn1.a,/usr/lib64/libffi.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
+#find . -type f -name 'Makefile' -exec sed -i 's:-lffi\b:-Wl,--whole-archive /usr/lib64/libffi.a -lpthread -ldl -lm -lmvec -Wl,--no-whole-archive:g' {} \;
+#find . -type f -name 'Makefile' -exec sed -i 's:-ltasn1\b:-Wl,--whole-archive /usr/lib64/libtasn1.a -lpthread -ldl -lm -lmvec -Wl,--no-whole-archive:g' {} \;
 make -j16 check V=1 VERBOSE=1 LDFLAGS="${LDFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" || :
+
+find . -type f -name 'Makefile' -exec sed -i 's:-lffi\b:/usr/lib64/libffi.a:g' {} \;
+find . -type f -name 'Makefile' -exec sed -i 's:-ltasn1\b:/usr/lib64/libtasn1.a:g' {} \;
