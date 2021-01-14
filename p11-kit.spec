@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : p11-kit
 Version  : 0.23.22
-Release  : 66
+Release  : 67
 URL      : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Source0  : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
@@ -18,7 +18,7 @@ Requires: p11-kit-libexec = %{version}-%{release}
 Requires: p11-kit-locales = %{version}-%{release}
 Requires: p11-kit-services = %{version}-%{release}
 Requires: ca-certs
-Requires: findutils
+Requires: ca-certs-static
 BuildRequires : bash-completion-dev
 BuildRequires : buildreq-meson
 BuildRequires : ca-certs
@@ -93,8 +93,6 @@ Requires: p11-kit-bin = %{version}-%{release}
 Requires: p11-kit-data = %{version}-%{release}
 Provides: p11-kit-devel = %{version}-%{release}
 Requires: p11-kit = %{version}-%{release}
-Requires: p11-kit-dev = %{version}-%{release}
-Requires: p11-kit-dev32 = %{version}-%{release}
 
 %description dev
 dev components for the p11-kit package.
@@ -107,7 +105,6 @@ Requires: p11-kit-lib32 = %{version}-%{release}
 Requires: p11-kit-bin = %{version}-%{release}
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-dev = %{version}-%{release}
-Requires: p11-kit-dev32 = %{version}-%{release}
 
 %description dev32
 dev32 components for the p11-kit package.
@@ -179,7 +176,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1610601295
+export SOURCE_DATE_EPOCH=1610604918
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -286,9 +283,6 @@ fi
 popd
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang p11-kit
-## Remove excluded files
-rm -f %{buildroot}/etc/pkcs11/pkcs11.conf.example
-rm -f %{buildroot}%{_libdir}/p11-kit/trust-extract-compat
 ## install_append content
 mv %{buildroot}/usr/bin/trust %{buildroot}/usr/bin/p11-trust
 install -m 0755 trust-stub %{buildroot}/usr/bin/trust
