@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : p11-kit
 Version  : 0.23.22
-Release  : 65
+Release  : 66
 URL      : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Source0  : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
@@ -179,46 +179,65 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1610407433
+export SOURCE_DATE_EPOCH=1610595740
 export GCC_IGNORE_WERROR=1
-## altflags1 content
-export CFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe  -fPIC -fdata-sections -ffunction-sections $PGO_USE"
-export FCFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe  -fPIC -fdata-sections -ffunction-sections $PGO_USE"
-export FFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe  -fPIC -fdata-sections -ffunction-sections $PGO_USE"
-export CXXFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe  -fPIC -fdata-sections -ffunction-sections $PGO_USE"
-export LDFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe  -fPIC -fdata-sections -ffunction-sections $PGO_USE"
-#
+## altflags_pgo content
+## pgo generate
+export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage --coverage -fprofile-partial-training"
+export CFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fuse-ld=bfd -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fuse-ld=bfd -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_GEN"
+export FFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fuse-ld=bfd -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fuse-ld=bfd -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fuse-ld=bfd -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_GEN"
+#  -fipa-pta
+export PGO_USE="-fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-correction -fprofile-partial-training"
+export CFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_USE"
+export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_USE"
+export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_USE"
+export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -fvisibility-inlines-hidden -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_USE"
+export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -malign-data=cacheline -feliminate-unused-debug-types -fno-lto -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -pipe  -fPIC -fdata-sections -ffunction-sections -flto=16 -fno-plt -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -Wl,-O2 -Wl,-z,now -Wl,-z,relro -ffat-lto-objects -fomit-frame-pointer -ffast-math -fstrict-aliasing -fexceptions $PGO_USE"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 #
-export MAKEFLAGS=%{?_smp_mflags}
-#
 %global _lto_cflags 1
-#
-#unset CCACHE_DISABLE
-#export PATH="/usr/lib64/ccache/bin:$PATH"
-#export CCACHE_NOHASHDIR=true
-#export CCACHE_CPP2=true
-#export CCACHE_SLOPPINESS=pch_defines,time_macros,locale,file_stat_matches,file_stat_matches_ctime,include_file_ctime,include_file_mtime,modules,system_headers,clang_index_store,file_macro
+unset CCACHE_DISABLE
+export PATH="/usr/lib64/ccache/bin:$PATH"
+export CCACHE_NOHASHDIR=true
+export CCACHE_CPP2=true
+export CCACHE_SLOPPINESS=pch_defines,time_macros,locale,file_stat_matches,file_stat_matches_ctime,include_file_ctime,include_file_mtime,modules,system_headers,clang_index_store,file_macro
 #export CCACHE_SLOPPINESS=modules,include_file_mtime,include_file_ctime,time_macros,pch_defines,file_stat_matches,clang_index_store,system_headers,locale
 #export CCACHE_SLOPPINESS=pch_defines,time_macros,locale,clang_index_store,file_macro
-#export CCACHE_DIR=/var/tmp/ccache
-#export CCACHE_BASEDIR=/builddir/build/BUILD
+export CCACHE_DIR=/var/tmp/ccache
+export CCACHE_BASEDIR=/builddir/build/BUILD
 #export CCACHE_LOGFILE=/var/tmp/ccache/cache.debug
 #export CCACHE_DEBUG=true
 #export CCACHE_NODIRECT=true
-#find . -type f -name 'Makefile' -exec sed -i 's:-lffi\b:-Wl,--whole-archive,/usr/lib64/libffi.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
-#find . -type f -name 'Makefile' -exec sed -i 's:-ltasn1\b:-Wl,--whole-archive,/usr/lib64/libtasn1.a,-lpthread,-ldl,-lm,-lmvec,--no-whole-archive:g' {} \;
-#make -j16 VERBOSE=1 V=1 LDFLAGS="${LDFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive"
-#find . -type f -name 'Makefile' -exec sed -i 's:-lffi\b:-Wl,--whole-archive /usr/lib64/libffi.a -lpthread -ldl -lm -lmvec -Wl,--no-whole-archive:g' {} \;
-#find . -type f -name 'Makefile' -exec sed -i 's:-ltasn1\b:-Wl,--whole-archive /usr/lib64/libtasn1.a -lpthread -ldl -lm -lmvec -Wl,--no-whole-archive:g' {} \;
-#make -j16 check V=1 VERBOSE=1 LDFLAGS="${LDFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" CFLAGS="${CFLAGS} -Wl,--whole-archive /usr/lib64/libffi.a /usr/lib64/libtasn1.a -Wl,--no-whole-archive" || :
-#find . -type f -name 'Makefile' -exec sed -i 's:-lffi\b:/usr/lib64/libffi.a:g' {} \;
-#find . -type f -name 'Makefile' -exec sed -i 's:-ltasn1\b:/usr/lib64/libtasn1.a:g' {} \;
-#V=1 VERBOSE=1 LDFLAGS="${LDFLAGS} -static-libstdc++ -static-libgcc -pthread -Wl,--whole-archive,/usr/lib64/libffi.a,/usr/lib64/libtasn1.a,--no-whole-archive -lpthread" CFLAGS="${CFLAGS} -static-libstdc++ -static-libgcc -pthread -Wl,--whole-archive,/usr/lib64/libffi.a,/usr/lib64/libtasn1.a,--no-whole-archive -lpthread"
-## altflags1 end
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddefault_library=both -Dgtk_doc=false -Dman=false -Dtrust_paths=/var/cache/ca-certs -Dhash_impl=internal -Dtest=true -Dlibffi=enabled  builddir
+## altflags_pgo end
+export CFLAGS="${CFLAGS_GENERATE}"
+export CXXFLAGS="${CXXFLAGS_GENERATE}"
+export FFLAGS="${FFLAGS_GENERATE}"
+export FCFLAGS="${FCFLAGS_GENERATE}"
+export LDFLAGS="${LDFLAGS_GENERATE}"
+meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddefault_library=both -Dgtk_doc=false -Dman=false -Dtrust_paths=/var/cache/ca-certs -Dhash_impl=internal -Dtest=true -Dlibffi=enabled  builddir
+## make_prepend content
+find . -type f -name '*.txt' -exec sed -i 's:libffi\.so\b:libffi.a:g' {} \;
+find . -type f -name '*.ninja' -exec sed -i 's:libffi\.so\b:libffi.a:g' {} \;
+find . -type f -name '*.json' -exec sed -i 's:libffi\.so\b:libffi.a:g' {} \;
+find . -type f -name '*.txt' -exec sed -i 's:libtasn1\.so\b:libtasn1.a:g' {} \;
+find . -type f -name '*.ninja' -exec sed -i 's:libtasn1\.so\b:libtasn1.a:g' {} \;
+find . -type f -name '*.json' -exec sed -i 's:libtasn1\.so\b:libtasn1.a:g' {} \;
+## make_prepend end
+ninja %{?_smp_mflags} -v -C builddir
+
+meson test -C builddir || :
+find builddir/ -type f,l -not -name '*.gcno' -delete -print
+export CFLAGS="${CFLAGS_USE}"
+export CXXFLAGS="${CXXFLAGS_USE}"
+export FFLAGS="${FFLAGS_USE}"
+export FCFLAGS="${FCFLAGS_USE}"
+export LDFLAGS="${LDFLAGS_USE}"
+meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddefault_library=both -Dgtk_doc=false -Dman=false -Dtrust_paths=/var/cache/ca-certs -Dhash_impl=internal -Dtest=true -Dlibffi=enabled  builddir
 ## make_prepend content
 find . -type f -name '*.txt' -exec sed -i 's:libffi\.so\b:libffi.a:g' {} \;
 find . -type f -name '*.ninja' -exec sed -i 's:libffi\.so\b:libffi.a:g' {} \;
@@ -251,9 +270,9 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
-meson test -C builddir
-cd ../build32;
 meson test -C builddir || :
+cd ../build32;
+meson test -C builddir || : || :
 
 %install
 pushd ../build32/
