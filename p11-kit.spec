@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : p11-kit
 Version  : 0.23.22
-Release  : 68
+Release  : 69
 URL      : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Source0  : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
@@ -176,7 +176,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1610669792
+export SOURCE_DATE_EPOCH=1610851356
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
@@ -314,31 +314,31 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/include/p11-kit-1/p11-kit/pkcs11x.h
 /usr/include/p11-kit-1/p11-kit/remote.h
 /usr/include/p11-kit-1/p11-kit/uri.h
-/usr/lib64/libnssckbi.so
-/usr/lib64/libp11-kit.so
-/usr/lib64/p11-kit-proxy.so
 /usr/lib64/pkgconfig/p11-kit-1.pc
-/usr/lib64/pkcs11/p11-kit-trust.so
 
 %files dev32
 %defattr(-,root,root,-)
-/usr/lib32/libp11-kit.so
-/usr/lib32/p11-kit-proxy.so
 /usr/lib32/pkgconfig/32p11-kit-1.pc
 /usr/lib32/pkgconfig/p11-kit-1.pc
-/usr/lib32/pkcs11/p11-kit-trust.so
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/libnssckbi.so
+/usr/lib64/libp11-kit.so
 /usr/lib64/libp11-kit.so.0
 /usr/lib64/libp11-kit.so.0.3.0
+/usr/lib64/p11-kit-proxy.so
 /usr/lib64/pkcs11/p11-kit-client.so
+/usr/lib64/pkcs11/p11-kit-trust.so
 
 %files lib32
 %defattr(-,root,root,-)
+/usr/lib32/libp11-kit.so
 /usr/lib32/libp11-kit.so.0
 /usr/lib32/libp11-kit.so.0.3.0
+/usr/lib32/p11-kit-proxy.so
 /usr/lib32/pkcs11/p11-kit-client.so
+/usr/lib32/pkcs11/p11-kit-trust.so
 
 %files libexec
 %defattr(-,root,root,-)
