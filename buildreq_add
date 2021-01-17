@@ -4,6 +4,7 @@
 #
 ca-certs
 ca-certs-static
+ccache
 findutils
 gcc-dev32
 gcc-libgcc32
@@ -16,14 +17,14 @@ libffi-dev
 libffi-dev32
 libffi-staticdev
 libffi-staticdev32
-pkg-config
 libtasn1-dev
 libtasn1-dev32
 libtasn1-staticdev
 libtasn1-staticdev32
-ccache
+libxslt-bin
 openssl
 openssl-dev
+pkg-config
 util-linux-bin
-util-linux-extras
 util-linux-dev
+util-linux-extras

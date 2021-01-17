@@ -5,10 +5,9 @@
 32libffi
 32libsystemd
 32libtasn1
-libffi
-libsystemd
-32libtasn1
-libtasn1
 libcrypto
+libffi
 libssl
+libsystemd
+libtasn1
 openssl
