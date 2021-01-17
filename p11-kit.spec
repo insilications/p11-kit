@@ -318,6 +318,7 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/lib64/libp11-kit.so
 /usr/lib64/p11-kit-proxy.so
 /usr/lib64/pkgconfig/p11-kit-1.pc
+/usr/lib64/pkcs11/p11-kit-trust.so
 
 %files dev32
 %defattr(-,root,root,-)
@@ -325,20 +326,19 @@ ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 /usr/lib32/p11-kit-proxy.so
 /usr/lib32/pkgconfig/32p11-kit-1.pc
 /usr/lib32/pkgconfig/p11-kit-1.pc
+/usr/lib32/pkcs11/p11-kit-trust.so
 
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libp11-kit.so.0
 /usr/lib64/libp11-kit.so.0.3.0
 /usr/lib64/pkcs11/p11-kit-client.so
-/usr/lib64/pkcs11/p11-kit-trust.so
 
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libp11-kit.so.0
 /usr/lib32/libp11-kit.so.0.3.0
 /usr/lib32/pkcs11/p11-kit-client.so
-/usr/lib32/pkcs11/p11-kit-trust.so
 
 %files libexec
 %defattr(-,root,root,-)
