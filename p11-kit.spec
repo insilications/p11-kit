@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : p11-kit
 Version  : 0.23.22
-Release  : 70
+Release  : 71
 URL      : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Source0  : file:///insilications/build/clearlinux/packages/p11-kit/p11-kit-0.23.22.tar.gz
 Summary  : Library and proxy module for properly loading and sharing PKCS#11 modules.
@@ -60,6 +60,8 @@ BuildRequires : util-linux-extras
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
+# Disable automatic requeriments processing
+AutoReq: no
 Patch1: 0001-Added-P11_TRUST_PATHS-to-override-via-env.patch
 Patch2: 0002-Use-p11-trust-instead-of-trust.patch
 
@@ -73,6 +75,8 @@ Group: Binaries
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-libexec = %{version}-%{release}
 Requires: p11-kit-services = %{version}-%{release}
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description bin
 bin components for the p11-kit package.
@@ -81,6 +85,8 @@ bin components for the p11-kit package.
 %package data
 Summary: data components for the p11-kit package.
 Group: Data
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description data
 data components for the p11-kit package.
@@ -94,6 +100,8 @@ Requires: p11-kit-bin = %{version}-%{release}
 Requires: p11-kit-data = %{version}-%{release}
 Provides: p11-kit-devel = %{version}-%{release}
 Requires: p11-kit = %{version}-%{release}
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description dev
 dev components for the p11-kit package.
@@ -106,6 +114,8 @@ Requires: p11-kit-lib32 = %{version}-%{release}
 Requires: p11-kit-bin = %{version}-%{release}
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-dev = %{version}-%{release}
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description dev32
 dev32 components for the p11-kit package.
@@ -116,6 +126,8 @@ Summary: lib components for the p11-kit package.
 Group: Libraries
 Requires: p11-kit-data = %{version}-%{release}
 Requires: p11-kit-libexec = %{version}-%{release}
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description lib
 lib components for the p11-kit package.
@@ -125,6 +137,8 @@ lib components for the p11-kit package.
 Summary: lib32 components for the p11-kit package.
 Group: Default
 Requires: p11-kit-data = %{version}-%{release}
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description lib32
 lib32 components for the p11-kit package.
@@ -133,6 +147,8 @@ lib32 components for the p11-kit package.
 %package libexec
 Summary: libexec components for the p11-kit package.
 Group: Default
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description libexec
 libexec components for the p11-kit package.
@@ -141,6 +157,8 @@ libexec components for the p11-kit package.
 %package locales
 Summary: locales components for the p11-kit package.
 Group: Default
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description locales
 locales components for the p11-kit package.
@@ -149,6 +167,8 @@ locales components for the p11-kit package.
 %package services
 Summary: services components for the p11-kit package.
 Group: Systemd services
+# Disable automatic requeriments processing
+AutoReq: no
 
 %description services
 services components for the p11-kit package.
@@ -177,7 +197,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1610852658
+export SOURCE_DATE_EPOCH=1610853065
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
